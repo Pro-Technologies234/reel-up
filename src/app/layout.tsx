@@ -4,7 +4,7 @@ import localFont from 'next/font/local'
 
 const clashdisplay = localFont({
   src: [
-    { path: '../assets/fonts/clashdisplay/ClashDisplay-ExtraLight.ttf', weight: '200', style: 'normal' },
+    { path: '../assets/fonts/clashdisplay/ClashDisplay-Extralight.ttf', weight: '200', style: 'normal' },
     { path: '../assets/fonts/clashdisplay/ClashDisplay-Light.ttf', weight: '300', style: 'normal' },
     { path: '../assets/fonts/clashdisplay/ClashDisplay-Regular.ttf', weight: '400', style: 'normal' },
     { path: '../assets/fonts/clashdisplay/ClashDisplay-Medium.ttf', weight: '500', style: 'normal' },
