@@ -1,16 +1,20 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import localFont from 'next/font/local'
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const clashdisplay = localFont({
+  src: [
+    { path: '../assets/fonts/clashdisplay/ClashDisplay-ExtraLight.ttf', weight: '200', style: 'normal' },
+    { path: '../assets/fonts/clashdisplay/ClashDisplay-Light.ttf', weight: '300', style: 'normal' },
+    { path: '../assets/fonts/clashdisplay/ClashDisplay-Regular.ttf', weight: '400', style: 'normal' },
+    { path: '../assets/fonts/clashdisplay/ClashDisplay-Medium.ttf', weight: '500', style: 'normal' },
+    { path: '../assets/fonts/clashdisplay/ClashDisplay-SemiBold.ttf', weight: '600', style: 'normal' },
+    { path: '../assets/fonts/clashdisplay/ClashDisplay-Bold.ttf', weight: '700', style: 'normal' },
+  ],
+  variable: '--font-clashdisplay',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -25,7 +29,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${clashdisplay.variable}  antialiased`}
       >
         {children}
       </body>
