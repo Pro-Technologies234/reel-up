@@ -65,7 +65,7 @@ export function DriveHigher() {
                           <Image src={sell_img2} alt="img.png" className="object-cover w-full  h-full" />
                         </div>
                         <div>
-                          <span className="text-xs font-medium  line-clamp-1" >Pondi's Hydra Light</span>
+                          <span className="text-xs font-medium  line-clamp-1" >Pondi&lsquo;s Hydra Light</span>
                           <span className="text-xs font-medium  line-clamp-1" >$1500 USD</span>
 
                         </div>
