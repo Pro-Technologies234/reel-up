@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { Navbar } from "../components/shared/navbar";
 import { Hero } from "@/components/home/Hero";
 import { SellLikePro } from "@/components/home/SellLikePro";
