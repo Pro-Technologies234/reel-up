@@ -8,7 +8,7 @@ const clashdisplay = localFont({
     { path: '../assets/fonts/clashdisplay/ClashDisplay-Light.ttf', weight: '300', style: 'normal' },
     { path: '../assets/fonts/clashdisplay/ClashDisplay-Regular.ttf', weight: '400', style: 'normal' },
     { path: '../assets/fonts/clashdisplay/ClashDisplay-Medium.ttf', weight: '500', style: 'normal' },
-    { path: '../assets/fonts/clashdisplay/ClashDisplay-SemiBold.ttf', weight: '600', style: 'normal' },
+    { path: '../assets/fonts/clashdisplay/ClashDisplay-Semibold.ttf', weight: '600', style: 'normal' },
     { path: '../assets/fonts/clashdisplay/ClashDisplay-Bold.ttf', weight: '700', style: 'normal' },
   ],
   variable: '--font-clashdisplay',
