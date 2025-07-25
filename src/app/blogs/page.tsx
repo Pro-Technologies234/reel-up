@@ -6,7 +6,6 @@ import sell_img2 from '@/assets/images/home/Glove Photoshoot.jpeg'
 import sell_img3 from '@/assets/images/home/40019.jpg'
 import sell_img4 from '@/assets/images/home/_DEEPBROW Love Deep Sparkle Necklace_.jpeg'
 import sell_img5 from '@/assets/images/home/Search Result.jpeg'
-import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/shared/navbar";
 
 export default function Blogs() {
