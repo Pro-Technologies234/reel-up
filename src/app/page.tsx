@@ -8,6 +8,7 @@ import { BookADemo } from "@/components/home/BookADemo";
 import { Footer } from "@/components/shared/footer";
 
 export default function Home() {
+  
   return (
     <>
       <div className="w-full h-dvh bg-gradient-to-b font-clashdisplay from-blue-100  to-white">

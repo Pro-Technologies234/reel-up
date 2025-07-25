@@ -1,40 +1,52 @@
 'use client'
+
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import React from "react";
 
-export function Navbar() {
-    const currentPath = usePathname()
-    const navigation = [
-        {name: 'Products', link: '/'},
-        {name: 'Customer Stories', link: '/'},
-        {name: 'Resources', link: '/'},
-        {name: 'Pricing', link: '/'},
-    ]
+type NavbarProps = {
+  mode?: 'light' | 'dark'; // optional, default is 'light'
+};
 
-    return(
-        <div className="w-full max-w-7xl flex m-auto justify-between items-center h-15 px-4" >
-            <div>
-                <h1 className="font-semibold text-2xl" >RealUp</h1>
-            </div>
-            <nav className="flex gap-4 not-md:hidden text-sm items-center" >
-                {
-                    navigation.map((nav,id)=>(
-                        <Link key={id} href={nav.link} className=" hover:text-black text-zinc-800 transition-colors" >
-                            {nav.name}
-                        </Link>
-                    ))
-                }
-            </nav>
-            <div className="flex gap-4 items-center" >
-                <Button variant={'ghost'} className="cursor-pointer " >
-                    Book A Demo
-                </Button>
-                <Button className="cursor-pointer rounded-full" >
-                    Get Started
-                </Button>
-            </div>
+export function Navbar({ mode = 'light' }: NavbarProps) {
+  const currentPath = usePathname();
 
-        </div>
-    )
+  const navigation = [
+    { name: 'Products', link: '/products' },
+    { name: 'Customer Stories', link: '/customer_stories' },
+    { name: 'Resources', link: '/resources' },
+    { name: 'Pricing', link: '/' },
+  ];
+
+  // Define text color based on mode
+  const textColor =
+    mode === 'dark' ? 'text-white hover:text-gray-300' : 'text-zinc-800 hover:text-black';
+
+  return (
+    <div className="w-full absolute z-10 top-0 max-w-7xl flex m-auto justify-between items-center h-15 px-4">
+      <div>
+        <Link href={'/'}>
+          <h1 className={`font-semibold text-2xl ${textColor}`}>RealUp</h1>
+        </Link>
+      </div>
+
+      <nav className="flex gap-4 not-md:hidden text-sm items-center">
+        {navigation.map((nav, id) => (
+          <Link key={id} href={nav.link} className={`${textColor} ${currentPath === nav.link && 'font-medium '} transition-colors`}>
+            {nav.name}
+          </Link>
+        ))}
+      </nav>
+
+      <div className="flex gap-4 items-center">
+        <Button variant={'link'} className={`cursor-pointer rounded-full ${ mode === 'dark' ? 'text-white' : '' }`}>
+          Book A Demo
+        </Button>
+        <Button className={`cursor-pointer rounded-full ${ mode === 'dark' ? 'text-white' : '' }`}>
+          Get Started
+        </Button>
+      </div>
+    </div>
+  );
 }

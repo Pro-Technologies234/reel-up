@@ -4,6 +4,7 @@ import Image from "next/image";
 import img from '@/assets/images/Poppy & Ludivine I - Louise Carrasco.jpeg'
 import sell_img2 from '@/assets/images/home/download (6).jpeg'
 import sell_img5 from '@/assets/images/home/Search Result.jpeg'
+import Link from "next/link";
 
 export function OurBlogs() {
     return (
@@ -100,9 +101,11 @@ export function OurBlogs() {
             </div>
           </div>
           <div className="flex justify-center mt-10" >
-            <Button variant={'ghost'} size={'lg'}  className="bg-green-300 rounded-full" >
-              See All Blogs
-            </Button>
+            <Link href={'/blogs'} >
+              <Button variant={'ghost'} size={'lg'}  className="bg-green-300 cursor-pointer rounded-full" >
+                See All Blogs
+              </Button>
+            </Link>
           </div>
         </section>
     )

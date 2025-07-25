@@ -28,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${clashdisplay.variable}  antialiased`}
+        className={`${clashdisplay.variable} font-clashdisplay  antialiased`}
       >
         {children}
       </body>
