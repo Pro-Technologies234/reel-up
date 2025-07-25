@@ -7,7 +7,7 @@ import resources4 from '@/assets/images/resources/40360.jpg'
 import resources5 from '@/assets/images/resources/update.jpg'
 import { ResourcesCard } from '@/components/shared/ResourceCard'
 
-export const resourceSections = [
+const resourceSections = [
   {
     title: "Creator Guides",
     description: [
