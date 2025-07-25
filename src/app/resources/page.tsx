@@ -108,7 +108,7 @@ export function ResourcesCard({ name, description, img, reverse = false }: Resou
                 </div>
                 <ul>
                     {description.map((desc,indx)=>(
-                        <li className='text-sm list-disc ml-4 leading-tight'>
+                        <li key={indx} className='text-sm list-disc ml-4 leading-tight'>
                             {desc}
                         </li>
                     )
