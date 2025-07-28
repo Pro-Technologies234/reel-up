@@ -69,7 +69,7 @@ export default function Resources() {
                 Discover tips, guides, and resources to help you grow your audience, enhance your content, and succeed with ReelUp.
             </p>
         </section>
-        <section className='w-full items-center grid md:grid-cols-2 space-y-20 gap-x-10 py-1  m-auto p-4 md:p-20  lg:p-30' >  
+        <section className='w-full items-center grid md:grid-cols-2 space-y-20 gap-x-8 py-1  m-auto p-4 md:p-10' >  
             {
                 resourceSections.map((resource,indx)=>(
                     <ResourcesCard key={indx} 

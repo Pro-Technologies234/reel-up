@@ -16,7 +16,7 @@ export function Navbar({ mode = 'light' }: NavbarProps) {
     { name: 'Products', link: '/products' },
     { name: 'Customer Stories', link: '/customer_stories' },
     { name: 'Resources', link: '/resources' },
-    { name: 'Pricing', link: '/' },
+    { name: 'Pricing', link: '/pricing' },
   ];
 
   // Define text color based on mode
