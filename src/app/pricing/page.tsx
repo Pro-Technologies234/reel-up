@@ -60,7 +60,7 @@ export default function Pricing() {
             Everywhere At One
           </h1>
           <p className="text-center md:w-md lg:w-lg not-md:text-xs not-lg:text-sm mt-2">
-            Whether you're just starting or scaling your creative business, ReelUp has a plan for you.
+            Whether you&lsquo;re just starting or scaling your creative business, ReelUp has a plan for you.
           </p>
             <div className="w-full  max-w-6xl grid md:grid-cols-3 mt-20 gap-5">
                 {pricingPlans.map((plan, index) => (
