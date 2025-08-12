@@ -59,7 +59,7 @@ const resourceSections = [
 
 export default function Resources() {
     return(
-        <>
+        <div className='bg-white text-black' >
         <Navbar/>
         <section className='w-full flex flex-col items-center max-w-6xl m-auto px-20 pt-20' >  
             <h1 className=" text-3xl leading-snug uppercase  md:text-4xl px-4 md:px-8 lg:px-10 tracking-wider lg:text-5xl text-center mt-4">
@@ -82,7 +82,7 @@ export default function Resources() {
             }
         </section>
         <Footer/>
-        </>
+        </div>
     )
 }
 

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import {  Facebook, Instagram, Linkedin, Twitter, Youtube } from "lucide-react";
+import {  Clock, Facebook, Instagram, Linkedin, Twitter, Youtube } from "lucide-react";
 
 export function Footer() { 
     return(
@@ -13,14 +13,14 @@ export function Footer() {
               <Link href='/'>
                 Case Studies
               </Link>
-              <Link href='/'>
+              <Link href='/blogs'>
                 Blogs
               </Link>
               <Link href='/'>
                 Book a Demo
               </Link>
             </div>
-            <div className="flex flex-col gap-2 text-sm" >
+            <div className="flex flex-col bg- gap-2 text-sm" >
               <span className="font-semibold text-smm" >Resources</span>
               <Link href='/'>
                 Integrations
@@ -59,6 +59,7 @@ export function Footer() {
               <Facebook/>
               <Youtube/>
               <Twitter/>
+              <Clock/>
             </div>
             <div>
 

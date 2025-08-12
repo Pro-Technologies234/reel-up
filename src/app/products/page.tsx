@@ -11,7 +11,7 @@ import { Footer } from '@/components/shared/footer'
 
 export default function Products() {
     return(
-        <>
+        <div className='bg-white text-black' >
         <Navbar mode='dark' />
         <div className="w-full h-dvh text-white bg-gradient-to-b relative font-clashdisplay from-blue-100  to-white">
             <Image src={prod_1} alt='2151967470.jpg' className='object-cover w-full absolute rounded-2xl inset-0 h-full' />
@@ -211,6 +211,6 @@ export default function Products() {
 
         </section>
         <Footer/>
-        </>
+        </div>
     )
 }

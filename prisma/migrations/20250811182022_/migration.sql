@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE `like` ADD COLUMN `reelId` VARCHAR(191) NULL;
+
+-- AddForeignKey
+ALTER TABLE `Like` ADD CONSTRAINT `Like_reelId_fkey` FOREIGN KEY (`reelId`) REFERENCES `Reel`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

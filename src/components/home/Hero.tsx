@@ -3,10 +3,11 @@ import { AppWindowMac, ChevronLeft, ChevronRight, Ellipsis, Minus,
 import { Button } from "../ui/button";
 import Image from "next/image";
 import img from '@/assets/images/Poppy & Ludivine I - Louise Carrasco.jpeg'
+import Link from "next/link";
 
 export function Hero() {
     return(
-        <main className="max-w-6xl flex flex-col items-center pt-20  w-full m-auto">
+        <main className="max-w-6xl text-black flex flex-col items-center pt-20  w-full m-auto">
           <span className="p-1.5 px-2.5 rounded-full border border-black text-xs text-center">
             PRODUCTS / LIVE STREAM SHOPPING
           </span>
@@ -22,9 +23,11 @@ export function Hero() {
             <Button className="rounded-full cursor-pointer">
               Get Started For Free!
             </Button>
-            <Button variant={"outline"} className="rounded-full cursor-pointer">
-              Book a Demo
-            </Button>
+            <Link href={'/register'} >
+              <Button variant={"outline"} className="rounded-full cursor-pointer">
+                Book a Demo
+              </Button>
+            </Link>
           </div>
           <div className="w-220 not-md:scale-30 mt-15 space-y-2  rounded-2xl bg-black p-2 pb-0 relative">
             <div className="w-full flex justify-between">

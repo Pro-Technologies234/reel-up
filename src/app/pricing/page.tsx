@@ -48,8 +48,8 @@ const pricingPlans = [
 export default function Pricing() {
   
   return (
-    <>
-      <div className="w-full h-dvh bg-gradient-to-b font-clashdisplay from-blue-100  to-white">
+    <div className="bg-white text-black h-full" >
+      <div className="w-full  h-full bg-gradient-to-b font-clashdisplay from-blue-3 00  to-white">
         <Navbar />
         <main className="max-w-6xl flex flex-col items-center pt-20  w-full m-auto">
           <span className="p-1.5 px-2.5 rounded-full uppercase border border-black text-xs text-center">
@@ -66,10 +66,11 @@ export default function Pricing() {
                 {pricingPlans.map((plan, index) => (
                     <PricingCard key={index} {...plan} />
                 ))}
+                
             </div>
         </main>
         <Footer/>
       </div>
-    </>
+    </div>
   );
 }

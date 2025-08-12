@@ -4,7 +4,7 @@ import { MicOff, Minimize, MonitorOff, VideoOff, X } from "lucide-react";
 
 export default function About() {
     return (
-        <>
+        <div className="bg-white text-black" >
             <Navbar/>
             <section className="text-center py-20 bg-gradient-to-b from-blue-50 to-white">
                 <h1 className="text-5xl font-medium uppercase text-zinc-800">About ReelUp</h1>
@@ -50,7 +50,7 @@ export default function About() {
                 </button>
             </section>
             <Footer/>
-        </>
+        </div>
 
     )
 }

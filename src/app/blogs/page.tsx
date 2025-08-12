@@ -49,7 +49,7 @@ export default function Blogs() {
     ];
 
     return(
-        <>
+        <div className="bg-white text-black" >
             <Navbar/>
             <section className="max-w-6xl flex flex-col items-center p-4 md:p-10 lg:p-20  w-full m-auto">
             <span className="p-1.5 px-2.5 rounded-full border border-black text-xs text-center">
@@ -83,7 +83,7 @@ export default function Blogs() {
             ))}
             </div>
             </section>
-        </>
+        </div>
 
 
     )

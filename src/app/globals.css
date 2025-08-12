@@ -40,6 +40,7 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --animate-sync: sync 10s ease-out infinite;;
 }
 
 :root {
@@ -101,7 +102,7 @@
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
+  --sidebar: oklch(0% 0 0);
   --sidebar-foreground: oklch(0.985 0 0);
   --sidebar-primary: oklch(0.488 0.243 264.376);
   --sidebar-primary-foreground: oklch(0.985 0 0);
@@ -119,3 +120,16 @@
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes sync {
+  0% {
+    opacity: 0;
+  };
+  50% {
+    opacity: 1;
+  };
+  100% {
+    opacity: 0;
+  }
+}
+

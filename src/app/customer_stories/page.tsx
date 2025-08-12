@@ -37,7 +37,7 @@ const testimonials = [
 
 export default function CustomerStories() {
     return(
-        <>
+        <div className='bg-white text-black' >
         <Navbar/>
         <section className='w-full flex flex-col items-center max-w-6xl m-auto p-20' >  
             <h1 className=" text-3xl leading-snug uppercase  md:text-4xl px-4 md:px-8 lg:px-10 tracking-wider lg:text-5xl text-center mt-4">
@@ -80,7 +80,7 @@ export default function CustomerStories() {
             </Button>
         </section>
         <Footer/>
-        </>
+        </div>
     )
 }
 

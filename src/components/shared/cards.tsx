@@ -43,7 +43,7 @@ export const PricingCard: React.FC<PricingCardProps> = ({
             </div>
           ))}
         </div>
-        <Button className="w-full p-6 rounded-full bg-blue-800 hover:bg-blue-700 cursor-pointer mt-6">
+        <Button className="w-full p-6 text-white rounded-full bg-blue-800 hover:bg-blue-700 cursor-pointer mt-6">
           {ctaText}
         </Button>
       </div>
