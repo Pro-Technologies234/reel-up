@@ -41,7 +41,6 @@ export async function registerUser(_: any, data: RegistrationFormType): Promise<
         username: userName,
         email,
         password: hashedPassword,
-        role: 'buyer',
       }
     });
     console.log('User created:', user);
