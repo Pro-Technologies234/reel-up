@@ -8,11 +8,9 @@ import {
 import { redirect } from "next/navigation";
 import { getCartItems } from "@/action/cart";
 import LivePlayer from "@/components/shared/live-player";
-
-import { getSrc } from "@livepeer/react/external";
-import { DemoPlayer } from "@/components/demoplayer";
 import { Src } from "@livepeer/react";
 import { HlsPlayer } from "@/components/shared/live-viewer";
+import { getUser } from "@/action/user";
 
 
 export default async function LiveFeed() {
@@ -21,6 +19,7 @@ export default async function LiveFeed() {
     if (!user) {
         redirect('/login')
     }
+    const {user: userInfo} = await getUser(user.id)
     const playbackId = 'playbackId'
     const src: Src[] | null = playbackId
         ? [
@@ -40,7 +39,7 @@ export default async function LiveFeed() {
             <AppSidebar />
             <SidebarInset>
                 <div className="dark:bg-black h-dvh w-full flex flex-col " >
-                    <Navbar cartItems={cartItems}  mode="dark" inApp={true} user={user?.username} />
+                    <Navbar cartItems={cartItems}  mode="dark" inApp={true} user={userInfo} />
                     <div className="w-full grid grid-cols-10 h-full md:pb-6 md:pr-6" >
                         <div className="col-span-10  p-4 flex justify-center items-center" >
                             {/* <DemoPlayer src={src} /> */}

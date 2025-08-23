@@ -8,7 +8,7 @@ import {
 import { redirect } from "next/navigation";
 import { getCartItems } from "@/action/cart";
 import { fetchReels } from "@/action/reel";
-import ReelScroller, { ReelViewer } from "@/components/shared/reel-viewer";
+import ReelScroller from "@/components/shared/reel-viewer";
 import { getUser } from "@/action/user";
 
 export default async function Discover() {

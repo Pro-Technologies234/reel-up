@@ -7,13 +7,19 @@ import { ProductCard } from "@/components/products/product-card";
 import { AppSidebar } from "@/components/shared/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
-import { Button } from "@/components/ui/button";
 import { getCartItems } from "@/action/cart";
-import Link from "next/link";
 import { CategoryButtons } from "@/components/shared/category-btns";
 import { getUser } from "@/action/user";
 
-export default async function Shop({ searchParams }: { searchParams: { category?: string, search?: string } }) {
+
+interface ShopPageProps {
+  searchParams: {
+    category?: string
+    search?: string
+  }
+}
+
+export default async function Shop({ searchParams }: ShopPageProps) {
 const { user } = await validateRequest();
 if (!user) {
   redirect("/login");

@@ -1,5 +1,4 @@
 import { Navbar } from "@/components/shared/navbar";
-import { LiveCard } from "@/components/live/live-card";
 import { validateRequest } from "@/lib/validate-user";
 import { AppSidebar } from "@/components/shared/app-sidebar"
 import {
@@ -8,18 +7,12 @@ import {
 } from "@/components/ui/sidebar"
 import { redirect } from "next/navigation";
 import { getCartItems } from "@/action/cart";
-import { ReelCard, ReelLoader } from "@/components/reel/reel-client";
 import { fetchReels } from "@/action/reel";
-import { CategoryButtons } from "@/components/shared/category-btns";
 import { ContentFilterButtons } from "@/components/shared/content-filter-btn";
 import { ReelViewer } from "@/components/shared/reel-viewer";
 import { fetchProducts } from "@/action/products";
 import { ProductCard } from "@/components/products/product-card";
-import Products from "../products/page";
 import { getSellers, getUser } from "@/action/user";
-import { Separator } from "@/components/ui/separator";
-import { FilterBtn } from "@/components/shared/filter-btn";
-import { SellerCard } from "@/components/shared/seller-card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 enum Filters {
@@ -28,11 +21,18 @@ enum Filters {
     SELLERS,
 }
 
-export default async function Search({searchParams}:{searchParams: {filter?: string, search?: string}}) {
+interface SearchPageProps {
+  searchParams?: {
+    filter?: string;
+    search?: string;
+  };
+}
+
+export default async function Search({searchParams}:SearchPageProps) {
     const { user } = await validateRequest()
     const { cartItems } = await getCartItems();
-    const  reels  = await fetchReels(searchParams.search);
-    const products = await fetchProducts(undefined,searchParams.search);
+    const  reels  = await fetchReels(searchParams?.search);
+    const products = await fetchProducts(undefined,searchParams?.search);
     const sellers = await getSellers()
     if (!user) {
         redirect('/login')
@@ -48,7 +48,7 @@ export default async function Search({searchParams}:{searchParams: {filter?: str
                 <Navbar cartItems={cartItems}  mode="dark" inApp={true} user={userInfo} />
                 <div className="max-w-7xl w-full h-[90dvh] md:grid lg:grid-cols-5 relative pt-1">
                     <ContentFilterButtons/>
-                    {searchParams.filter === "reels" && (
+                    {searchParams?.filter === "reels" && (
                     <ScrollArea className="col-span-4 h-[89dvh] ">
                         <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 p-4 pt-16">
                         {reels.map((reel) => (
@@ -58,7 +58,7 @@ export default async function Search({searchParams}:{searchParams: {filter?: str
                     </ScrollArea>
                     )}
                     {
-                        searchParams.filter === 'products' &&
+                        searchParams?.filter === 'products' &&
                         <ScrollArea className="col-span-4 h-[89dvh] ">
                             <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 p-4 pt-16">
                                 {

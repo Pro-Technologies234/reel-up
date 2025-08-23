@@ -1,8 +1,6 @@
 import { User } from "@/lib/prisma";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import Image from "next/image";
 import { Heart, ShoppingBag, Users } from "lucide-react";
-import { Button } from "../ui/button";
 import { FollowBtn } from "../products/product-client";
 
 type sellerCardProps = {

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useActionState, useEffect, useRef, useState } from 'react';
+import React, { useActionState, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { updateUserProfile } from '@/action/auth';
@@ -9,15 +9,12 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 import { toast } from "sonner";
-import { User } from '@/lib/prisma';
 import { UpdateProfileForm, UpdateProfileFormType } from '@/lib/schema';
 import { Separator } from '../ui/separator';
 import { Textarea } from '../ui/textarea';
 import { getUser } from '@/action/user';
-import { Scrypt } from 'lucia';
-import { uploadImage } from '@/action/utils';
 import { ProfileUploader } from './profile-image-upload';
-import { redirect, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 export function EditProfileForm({userId}:{userId: string}) {
   const router = useRouter()

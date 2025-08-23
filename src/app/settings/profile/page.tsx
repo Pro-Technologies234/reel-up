@@ -10,8 +10,7 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs"
 import Link from "next/link";;
-import { fetchProducts, fetchUserProducts } from "@/action/products";
-import { CreateProductDialog } from "@/components/shared/forms";
+import { fetchProducts } from "@/action/products";
 import { ProductCard } from "@/components/products/product-card";
 import { redirect } from "next/navigation";
 import { getUser } from "@/action/user";
