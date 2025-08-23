@@ -1,6 +1,4 @@
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import {
   Popover,
   PopoverContent,
@@ -16,7 +14,7 @@ export function CreatePopover() {
             CREATE
           </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-80 rounded-2xl p-1.5 ">
+      <PopoverContent className="w-80 dark:bg-black/50 bg-white/50 backdrop-blur-xl rounded-2xl p-1.5 ">
         <div className="space-y-2 rounded-lg p-2" >
             <h2 className="text-sm" >Create a product for your brand, bussiness, or something you want to sell.</h2>
             <div className="flex justify-end" > 

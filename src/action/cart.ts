@@ -145,3 +145,17 @@ export async function removeCartItem(productId: string): Promise<{ error?: strin
         return { error: 'Unable to remove product from cart' };
     }
 }
+
+
+export async function deleteCartItem(cartItemId: number) {
+    try {
+        await prisma.cartItem.delete({
+            where: {
+                id: cartItemId
+            }
+        })
+
+    } catch(error: any) {
+        return { error: 'Something went wrong'}
+    }
+}

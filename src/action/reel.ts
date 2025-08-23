@@ -61,10 +61,13 @@ Promise<{ error?: string; success?: string }> {
 }
 
 
-export async function fetchReels() {
+export async function fetchReels(search?: string) {
     try {
 
         const reels = await prisma.reel.findMany({
+            where: {
+                ...(search && { name: {contains: search} })
+            },
             include: {
                 likes: true,
                 createdBy: true,

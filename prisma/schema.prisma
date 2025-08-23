@@ -21,16 +21,52 @@ model User {
   password   String
   avatarUrl  String?
   bio        String?
-  role       String
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt
   sessions   Session[]
-  products   Product[] // <-- Relation Field (User has many Products)
+  products   Product[]
   cartItems  CartItem[]
   likes      Like[]
   liveStream LiveStream[]
   reel       Reel[]
   wishllist  WishList[]
+  followers  Follow[]     @relation("followers")
+  following  Follow[]     @relation("following")
+  bussinessName String?
+  bussinessAddress String?
+  phoneNumber String?
+  bussinessEmail String?
+  bussinessType BussinessType?
+  bussinessRegistrationNumber String?
+  bussinessCategory BussinessCategory[] @relation("bussinessCategory")
+  terms      Boolean? @default(false)
+  isSeller   Boolean? @default(false)
+  isVerified Boolean? @default(false)
+}
+
+enum BussinessType {
+  INDIVIDUAL
+  COMPANY
+}
+
+model BussinessCategory {
+  id String @id @default(cuid())
+  name String @unique()
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  users User[] @relation("bussinessCategory")
+}
+
+model Follow {
+  id          String   @id @default(cuid())
+  followerId  String
+  followingId String
+  createdAt   DateTime @default(now())
+
+  follower  User @relation("following", fields: [followerId], references: [id])
+  following User @relation("followers", fields: [followingId], references: [id])
+
+  @@unique([followerId, followingId])
 }
 
 model Session {
@@ -48,8 +84,8 @@ model Product {
   price       Float
   createdById String // <-- Foreign Key Field
   createdBy   User             @relation(fields: [createdById], references: [id])
-  categoryId  String?
-  category    ProductCategory? @relation(fields: [categoryId], references: [id])
+  categoryName  String?
+  category    ProductCategory? @relation(fields: [categoryName], references: [name])
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
   cartItems   CartItem[]
@@ -60,7 +96,7 @@ model Product {
 
 model ProductCategory {
   id        String    @id @default(cuid())
-  name      String
+  name      String    @unique()
   slug      String
   products  Product[]
   createdAt DateTime  @default(now())

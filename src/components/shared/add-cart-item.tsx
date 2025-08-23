@@ -46,15 +46,15 @@ export function AddToCart({ cartItem, productId }: AddCartProps) {
   }
 
   return (
-    <div className="space-x-2">
+    <div className="space-x-2 flex items-center">
       <button
         onClick={removeFromCart}
         disabled={itemAmount === 0}
-        className="bg-zinc-200 dark:bg-zinc-800 p-1 disabled:opacity-50 border border-gray-600 text-black dark:text-white cursor-pointer dark:hover:bg-zinc-700 hover:bg-zinc-300 rounded-md"
+        className="bg-zinc-200 dark:bg-zinc-800 p-1 disabled:opacity-50 border border-gray-400 dark:border-gray-600 text-black dark:text-white cursor-pointer dark:hover:bg-zinc-700 hover:bg-zinc-300 rounded-md"
       >
         <Minus size={15} />
       </button>
-      <span className="text-2xl">{itemAmount}</span>
+      <span className="text-md">{itemAmount}</span>
       <button
         onClick={addToCart}
         className="bg-yellow-300 p-1 text-black dark:text-black cursor-pointer dark:hover:bg-yellow-400 hover:bg-zinc-300 rounded-md"

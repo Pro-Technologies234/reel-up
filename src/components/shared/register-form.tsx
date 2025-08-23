@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useActionState, useEffect, useState } from 'react';
-import { redirect, useRouter } from 'next/navigation';
+import { redirect } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Loader2 } from 'lucide-react';
@@ -16,7 +16,6 @@ import {toast} from "sonner"
 export function RegisterForm() {
   
   const [loading,setLoading] = useState(false)
-  const router = useRouter();
   const [state, dispatch] = useActionState(registerUser, undefined)
   const form = useForm<RegistrationFormType>({
     resolver: zodResolver(RegistrationForm),
@@ -49,7 +48,7 @@ export function RegisterForm() {
   }, [state?.error, state?.success])
   return (
       <div className="rounded-4xl w-100 flex flex-col gap-2 bg-zinc-50/50 shadow-xl shadow-blue-200 p-2">
-        <div className='w-full h-full bg-white p-5 rounded-3xl'>
+        <div className='w-full h-full bg-white p-5 text-black rounded-3xl'>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4 flex flex-col h-full justify-between">
               <h1 className='text-4xl font-medium'>Register</h1>
@@ -107,7 +106,7 @@ export function RegisterForm() {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full rounded-xl p-6 cursor-pointer">
+                <Button type="submit" className="w-full rounded-xl p-6 bg-zinc-900 dark:bg-zinc-900 dark:hover:bg-black hover:bg-black text-white cursor-pointer">
                     { 
                       loading && <Loader2 className='animate-spin' />
                     }

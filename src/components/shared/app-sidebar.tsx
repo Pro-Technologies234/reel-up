@@ -24,7 +24,7 @@ const links = [{
     url: '/feed',
     icon: Play
 },{
-    name: 'Discover',
+    name: 'Reels',
     url: '/discover',
     icon: Compass
 },{

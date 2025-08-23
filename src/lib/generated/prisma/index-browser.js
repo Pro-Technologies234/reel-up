@@ -127,9 +127,31 @@ exports.Prisma.UserScalarFieldEnum = {
   password: 'password',
   avatarUrl: 'avatarUrl',
   bio: 'bio',
-  role: 'role',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  bussinessName: 'bussinessName',
+  bussinessAddress: 'bussinessAddress',
+  phoneNumber: 'phoneNumber',
+  bussinessEmail: 'bussinessEmail',
+  bussinessType: 'bussinessType',
+  bussinessRegistrationNumber: 'bussinessRegistrationNumber',
+  terms: 'terms',
+  isSeller: 'isSeller',
+  isVerified: 'isVerified'
+};
+
+exports.Prisma.BussinessCategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FollowScalarFieldEnum = {
+  id: 'id',
+  followerId: 'followerId',
+  followingId: 'followingId',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.SessionScalarFieldEnum = {
@@ -145,7 +167,7 @@ exports.Prisma.ProductScalarFieldEnum = {
   description: 'description',
   price: 'price',
   createdById: 'createdById',
-  categoryId: 'categoryId',
+  categoryName: 'categoryName',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -225,7 +247,22 @@ exports.Prisma.UserOrderByRelevanceFieldEnum = {
   password: 'password',
   avatarUrl: 'avatarUrl',
   bio: 'bio',
-  role: 'role'
+  bussinessName: 'bussinessName',
+  bussinessAddress: 'bussinessAddress',
+  phoneNumber: 'phoneNumber',
+  bussinessEmail: 'bussinessEmail',
+  bussinessRegistrationNumber: 'bussinessRegistrationNumber'
+};
+
+exports.Prisma.BussinessCategoryOrderByRelevanceFieldEnum = {
+  id: 'id',
+  name: 'name'
+};
+
+exports.Prisma.FollowOrderByRelevanceFieldEnum = {
+  id: 'id',
+  followerId: 'followerId',
+  followingId: 'followingId'
 };
 
 exports.Prisma.SessionOrderByRelevanceFieldEnum = {
@@ -238,7 +275,7 @@ exports.Prisma.ProductOrderByRelevanceFieldEnum = {
   name: 'name',
   description: 'description',
   createdById: 'createdById',
-  categoryId: 'categoryId'
+  categoryName: 'categoryName'
 };
 
 exports.Prisma.ProductCategoryOrderByRelevanceFieldEnum = {
@@ -286,10 +323,15 @@ exports.Prisma.WishListOrderByRelevanceFieldEnum = {
   userId: 'userId',
   productId: 'productId'
 };
-
+exports.BussinessType = exports.$Enums.BussinessType = {
+  INDIVIDUAL: 'INDIVIDUAL',
+  COMPANY: 'COMPANY'
+};
 
 exports.Prisma.ModelName = {
   User: 'User',
+  BussinessCategory: 'BussinessCategory',
+  Follow: 'Follow',
   Session: 'Session',
   Product: 'Product',
   ProductCategory: 'ProductCategory',

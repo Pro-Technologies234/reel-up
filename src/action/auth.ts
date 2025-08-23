@@ -2,10 +2,12 @@
 
 import { lucia } from "@/lib/lucia";
 import prisma from "@/lib/prisma";
-import { LoginForm, LoginFormType, RegistrationForm, RegistrationFormType, ProfileForm , ProfileFormType } from "@/lib/schema";
+import { LoginForm, LoginFormType, RegistrationForm, RegistrationFormType, UpdateProfileFormType } from "@/lib/schema";
 import { validateRequest } from "@/lib/validate-user";
 import { Scrypt } from "lucia";
 import { cookies } from "next/headers";
+import { saveImage } from "./products";
+import { deleteImage } from "./utils";
 
 export async function registerUser(_: any, data: RegistrationFormType): Promise<{ error?: string, success?: string }> {
     try {
@@ -104,23 +106,42 @@ export async function loginUser(_: any, data: LoginFormType): Promise<{ error?: 
 
 
 
-export async function updateUserProfile(_: any, data: { username: string }): Promise<{ error?: string; success?: string }> {
+export async function updateUserProfile(
+  _: any,
+  data: UpdateProfileFormType
+): Promise<{ error?: string; success?: string }> {
   try {
     const { user } = await validateRequest();
 
     if (!user) return { error: "Unauthorized" };
+    const oldImageUrl = await prisma.user.findUnique({
+      where: { id: user.id }
+    })
+    const { userName: username, bio, avatarUrl } = data;
 
-    const { username } = data;
+    let imageUrl: string | undefined;
+
+    if (avatarUrl) {
+      // Ensure saveImage is awaited (if it's async)
+      imageUrl = await saveImage(avatarUrl, "uploads");
+    }
 
     await prisma.user.update({
       where: { id: user.id },
-      data: { username }
+      data: {
+        username,
+        bio,
+        ...(imageUrl ? { avatarUrl: imageUrl } : {}),
+      },
     });
 
-    return { success: "Username updated successfully" };
+    if (oldImageUrl?.avatarUrl) {
+      await deleteImage(oldImageUrl.avatarUrl)
+    }
+
+    return { success: "Profile updated successfully" };
   } catch (error: any) {
-    console.error('Profile Update Error:', error);
-    return { error: error?.message };
+    console.error("Profile Update Error:", error);
+    return { error: error?.message ?? "Something went wrong" };
   }
 }
-

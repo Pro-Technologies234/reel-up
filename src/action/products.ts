@@ -6,18 +6,27 @@ import { error } from "console";
 import { mkdir } from "fs/promises";
 import { writeFile } from 'fs/promises';
 import path from 'path';
+import { v4 as uuidv4 } from "uuid";
 
 export type FetchProductsResponse = {
     products: Product[];
     error?: string;
 };
 
-export async function fetchProducts() {
+export async function fetchProducts(categoryName?: string, productName?: string, by_user?: boolean) {
     try {
         const { user } = await validateRequest();
 
         const products = await prisma.product.findMany({
-            
+            where: {
+              ...(by_user && {
+                createdById: user?.id
+              }),
+              ...(categoryName && { categoryName }),
+              ...(productName && {
+                name: { contains: productName }
+              })
+            },
             include: {
                 images: true,
                 likes: true,
@@ -125,7 +134,7 @@ export async function fetchUserProducts(): Promise<FetchProductsResponse> {
 
 
 
-export async function createProduct(_: any, data: { name: string; description: string; price: number; images: string[] }): 
+export async function createProduct(_: any, data: { name: string; description: string; price: number; category: string, images: string[] }): 
 Promise<{ error?: string; success?: string }> {
     try {
         const parsed = CreateProductForm.safeParse(data);
@@ -133,7 +142,7 @@ Promise<{ error?: string; success?: string }> {
             return { error: "Invalid product data" };
         }
 
-        const { name, description, price, images } = data;
+        const { name, description, price, images, category } = data;
 
         const { user } = await validateRequest();
         if (!user) {
@@ -146,25 +155,18 @@ Promise<{ error?: string; success?: string }> {
                 name,
                 description,
                 price,
-                createdById: user.id
+                categoryName: category,
+                createdById: user.id,
             }
         });
 
         // Save Images Locally and in DB with SourceType
         for (let i = 0; i < images.length; i++) {
-            const base64Data = images[i].replace(/^data:image\/\w+;base64,/, "");
-            const buffer = Buffer.from(base64Data, 'base64');
-            const fileName = `${product.id}-${i}.png`;
-            const filePath = path.join(process.cwd(), 'public', 'uploads', fileName);
-            const uploadsDir = path.join(process.cwd(), 'public', 'uploads');
-            // Ensure the uploads directory exists
-            await mkdir(uploadsDir, { recursive: true });
-            await writeFile(filePath, buffer);
-
+            const url = await saveImage(images[i], 'uploads')
             // Save Image with SourceType & sourceId in DB
             await prisma.productImage.create({
                 data: {
-                    url: `/uploads/${fileName}`,
+                    url: url,
                     productId: product.id,
                 }
             });
@@ -283,4 +285,19 @@ export async function getProductCategory() {
     console.log('Unable to get Product Categories')
     return { error: 'Unable to get Product Categories' }
   }
+}
+
+
+
+export async function saveImage(img: string, folder: 'uploads', ) {
+    const base64Data = img.replace(/^data:image\/\w+;base64,/, "");
+    const buffer = Buffer.from(base64Data, 'base64');
+    const fileName = `${uuidv4()}-.png`;
+    const filePath = path.join(process.cwd(), 'public', folder, fileName);
+    const uploadsDir = path.join(process.cwd(), 'public', folder);
+    // Ensure the uploads directory exists
+    await mkdir(uploadsDir, { recursive: true });
+    await writeFile(filePath, buffer);
+    const url = `/${folder}/${fileName}`
+    return url
 }

@@ -12,7 +12,7 @@ import { Button } from '../ui/button';
 import { CreateLiveStreamBtn } from './live-streamer';
 
 export default function LivePlayer() {
-  const [useCamera, setUseCamera] = useState(true);
+  const [useCamera, setUseCamera] = useState(false);
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [playbackId, setPlaybackId] = useState<string>("");
 

@@ -10,14 +10,23 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs"
 import Link from "next/link";;
-import { fetchUserProducts } from "@/action/products";
+import { fetchProducts, fetchUserProducts } from "@/action/products";
 import { CreateProductDialog } from "@/components/shared/forms";
 import { ProductCard } from "@/components/products/product-card";
+import { redirect } from "next/navigation";
+import { getUser } from "@/action/user";
 
 
 export default async function Profile() {
     const { user } = await validateRequest();
-    const { products } = await fetchUserProducts()
+
+    if(!user) {
+        redirect('/login')
+    }
+
+    const {user: userInfo} = await getUser(user.id)
+
+    const products = await fetchProducts(undefined,undefined,true)
     return (
         <div className="dark:bg-black h-dvh w-full dark:text-white flex justify-center">
             <div className="w-full h-full max-w-4xl p-4 flex flex-col gap-4">
@@ -38,8 +47,8 @@ export default async function Profile() {
                 {/* Profile Info */}
                 <div className="flex not-md:flex-col w-full gap-4 items-center px-4">
                     <Avatar className="w-25 md:w-35 lg:w-45 h-25 md:h-35 lg:h-45">
-                        <AvatarImage src="https://github.com/shadcn.png" />
-                        <AvatarFallback>{user?.username}</AvatarFallback>
+                        <AvatarImage src={userInfo?.avatarUrl || "https://github.com/shadcn.png"} className="object-cover" />
+                        <AvatarFallback>{user?.username[0]}</AvatarFallback>
                     </Avatar>
                     <div className="w-full space-y-2">
                         <div>
@@ -95,16 +104,15 @@ export default async function Profile() {
                             </TabsTrigger>
                         </TabsList>
                         <TabsContent value="shop" className="flex-1 overflow-hidden relative">
-                            <ScrollArea className="h-full w-full overflow-y-auto">
-                                {/* {
-                                    products.map((product, index) => (
-                                        <ProductCard key={index} product={product} images={product.images} />
-                                    ))
-                                } */}
+                            <ScrollArea className="h-full w-full overflow-y-auto ">
+                                <div className="grid grid-cols-3 gap-4" >
+                                    {
+                                        products.map((product, index) => (
+                                            <ProductCard key={index} product={product} />
+                                        ))
+                                    }
+                                </div>
                             </ScrollArea>
-                            <div className="absolute top-4 right-4" >
-                                <CreateProductDialog/>
-                            </div>
                         </TabsContent>
                         <TabsContent value="feed" className="flex-1 overflow-hidden">
                             <ScrollArea className="h-full w-full overflow-y-auto">

@@ -2,12 +2,13 @@
 import Image from "next/image";
 import { twMerge } from "tailwind-merge";
 import { Button } from "../ui/button";
-import { Bookmark, Loader2 } from "lucide-react";
+import { Bookmark, Loader2, UserPlus } from "lucide-react";
 import { addWishlist } from "@/action/wishlist";
 import { toast } from "sonner";
-import { useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import { Products } from "@/action/products";
 import { useRouter } from "next/navigation";
+import { checkFollowing, follow } from "@/action/user";
 
 type ImageSetterProps = {
   setCurrentImg: (url: string) => void;  // function that accepts a string and returns void
@@ -34,7 +35,7 @@ export const ImageSetter = ({ setCurrentImg, image, currentImg }: ImageSetterPro
 };
 
 type ImageViewerProps = {
-  img: {url: string}
+  img: {url: string, alt?: string}
   className?: string
 }
 
@@ -43,7 +44,7 @@ export const ImageViewer = ({img, className}:ImageViewerProps)=> {
       <div className= {`${twMerge("bg-black w-full relative overflow-hidden h-full rounded-2xl", className)}`} >
           <Image
               src={img.url}
-              alt="Product Image"
+              alt={img?.alt + '.png' || 'img.png'}
               fill
               className="object-cover"
           />
@@ -78,19 +79,58 @@ export const WishlistBtn = ({ wishlist, productId }: WishlistBtnProps) => {
   }
 
   return (
-    <Button
-      onClick={setWishlist}
-      size="icon"
-      className={`group dark:bg-zinc-950 bg-zinc-50 dark:text-white text-black dark:hover:bg-black hover:bg-white cursor-pointer z-10 backdrop-blur-xl rounded-xl`}
-    >
+      <Button
+          size={'icon'}
+          onClick={setWishlist}
+          className={`group dark:bg-zinc-950 bg-zinc-50 dark:hover:bg-black hover:bg-white ${
+              inWishlist ? 'text-black dark:text-white' : 'dark:text-white text-black'
+          } cursor-pointer z-10 backdrop-blur-xl rounded-xl`}
+      >
       {isLoading ? (
         <Loader2 className="animate-spin" />
       ) : (
         <Bookmark
-          className={inWishlist ? 'fill-yellow-300 text-yellow-300 ' : ''}
+          className={inWishlist ? 'fill-black dark:fill-white' : ' fill-transparent'}
           fill={inWishlist ? 'currentColor' : 'none'}
         />
       )}
+    </Button>
+  )
+}
+
+type FolowProps = {
+  user: Products[0]["createdBy"]
+}
+
+
+export const FollowBtn = ({user}:FolowProps)=>{
+  const [following,setFollowing] = useState(false)
+  const router = useRouter()
+  useEffect(()=>{
+    async function fetchFollower() {
+      const { isFollowing } = await checkFollowing(user.id)
+      setFollowing(isFollowing || false)
+      router.refresh()
+    }
+    fetchFollower()
+  },[])
+
+  async function followUser() {
+    const { success, error } = await follow(user.id)
+    if(success) {
+      toast.success(success)
+    } else {
+      toast.error(error)
+    }
+  }
+  return(
+    <Button onClick={()=>followUser()} size={'sm'} className="cursor-pointer bg-yellow-300 hover:bg-yellow-400 text-black rounded-xl" >
+      <UserPlus/>
+      {
+        following ? 
+        'Unfollow' :
+        'Follow'
+      }
     </Button>
   )
 }

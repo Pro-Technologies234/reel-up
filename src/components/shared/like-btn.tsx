@@ -1,12 +1,12 @@
 'use client'
-import { Heart, Loader2, Share, ThumbsUp } from "lucide-react";
+import { Heart, Loader2 } from "lucide-react";
 import { Button } from "../ui/button";
 import {  likeProduct, Products } from "@/action/products";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Separator } from "../ui/separator";
 import { useRouter } from "next/navigation";
-import { likeReel, Reels } from "@/action/reel";
+import { likeReel } from "@/action/reel";
 import { validateRequest } from "@/lib/validate-user";
 
 
@@ -48,7 +48,7 @@ export function ProductLikeBtn({ product }: LikeBtnProps) {
         <Button
             onClick={setLike}
             className={`group dark:bg-zinc-950 bg-zinc-50 dark:hover:bg-black hover:bg-white ${
-                isLiked ? 'text-yellow-300' : 'dark:text-white text-black'
+                isLiked ? 'text-black dark:text-white' : 'dark:text-white text-black'
             } cursor-pointer z-10 backdrop-blur-xl rounded-xl`}
         >
             <span className="mt-1">{likes}</span>
@@ -57,7 +57,7 @@ export function ProductLikeBtn({ product }: LikeBtnProps) {
                 <Loader2 className="animate-spin" />
             ) : (
                 <Heart
-                    className={isLiked ? 'fill-yellow-300' : 'hover:fill-yellow-300 fill-transparent'}
+                    className={isLiked ? 'fill-black dark:fill-white' : ' fill-transparent'}
                 />
             )}
         </Button>
@@ -131,7 +131,7 @@ export function ReelLikeBtn({ reel, currentUserId }: ReelLikeBtnProps) {
           />
         )}
       </Button>
-      <span className="text-white">{likes}</span>
+      <span className="text-white text-lg font-normal">{likes}</span>
     </div>
   )
 }

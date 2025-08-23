@@ -1,20 +1,19 @@
 'use client';
 
 import React, { useActionState, useEffect, useState } from 'react';
-import { redirect, useRouter } from 'next/navigation';
+import { redirect } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Loader2 } from 'lucide-react';
-import { loginUser, registerUser } from '../../action/auth';
+import { loginUser } from '../../action/auth';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { LoginForm, LoginFormType, RegistrationForm, RegistrationFormType } from '@/lib/schema';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { LoginForm, LoginFormType } from '@/lib/schema';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import {toast} from "sonner"
 import Image from 'next/image';
 import img from '@/assets/images/7686.jpg'
-import { redirectIfAuthenticated } from '@/lib/login-required';
 export  function LoginAccountForm() {
   const [loading,setLoading] = useState(false)
   const [state, dispatch] = useActionState(loginUser, undefined)
@@ -46,7 +45,7 @@ export  function LoginAccountForm() {
     } 
   }, [state?.error, state?.success])
   return (
-      <div className="rounded-4xl w-200 h-120 grid grid-cols-2 bg-zinc-50/50  shadow-xl shadow-blue-200 p-2">
+      <div className="rounded-4xl w-200 h-120 grid md:grid-cols-2 bg-zinc-50/50 text-black shadow-xl shadow-blue-200 p-2">
         <div className='w-full h-full bg-white relative p-5 rounded-l-3xl overflow-hidden'>
           <div className='absolute inset-0' >
             <Image src={img} alt='img.png' className='object-cover w-full h-full' />
@@ -84,7 +83,7 @@ export  function LoginAccountForm() {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full rounded-xl p-6 cursor-pointer">
+                <Button type="submit" className="w-full rounded-xl p-6 bg-zinc-900 dark:bg-zinc-900 dark:hover:bg-black hover:bg-black text-white cursor-pointer">
                     { 
                       loading && <Loader2 className='animate-spin' />
                     }

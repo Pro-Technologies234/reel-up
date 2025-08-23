@@ -10,7 +10,7 @@ import { Button } from "../ui/button";
 import { Bookmark, ThumbsUp } from "lucide-react";
 import { ProductLikeBtn } from "../shared/like-btn";
 import { Products } from "@/action/products";
-import { WishlistBtn } from "./product-client";
+import { ImageViewer, WishlistBtn } from "./product-client";
 
 
 
@@ -21,20 +21,11 @@ export interface ProductCardProps {
 export async function ProductCard({product}: ProductCardProps) {
     
     return(
-        <div className="h-76 dark:text-white group group-hover:shadow-black/50 relative rounded-3xl dark:bg-zinc-900/50 bg-zinc-100/50 bg- border grid grid-rows-3 dark:border-zinc-800 border-zinc-200 shadow-xl shadow-black/10 dark:shadow-black/20  p-2" >
+        <div className="not-md:relative md:aspect-[9/10] h-35 md:h-auto dark:text-white group group-hover:shadow-black/50 relative rounded-2xl md:rounded-3xl dark:bg-zinc-900/50 bg-zinc-100/50 bg- border grid md:grid-rows-3 not-md:grid-cols-3 dark:border-zinc-800 border-zinc-200 shadow-xl shadow-black/10 dark:shadow-black/20  p-2" >
             <ProductInfoDialog product={product} />
-            <div className="dark:bg-black bg-white rounded-2xl rounded-b-3xl row-span-2 overflow-hidden relative" >
-                    <Avatar className="absolute top-2 left-2 rounded-lg z-1" >
-                        <AvatarImage src="https://github.com/shadcn.png" />
-                        <AvatarFallback className="uppercase" >{product.createdBy?.username[0]}</AvatarFallback>
-                    </Avatar>
-                    <Image
-                    src={product.images?.[0]?.url ?? default_img}
-                    alt="Product Image"
-                    fill
-                    className="object-cover"
-                    />
-                    <span className="font-medium text-sm px-2 py-0.5 rounded-md text-black absolute top-2 right-2  bg-emerald-200" >
+            <div className="dark:bg-black bg-white rounded-xl md:rounded-2xl md:rounded-b-3xl  md:row-span-2 overflow-hidden md:relative" >
+                    <ImageViewer img={{url: product.images?.[0]?.url , alt: product.name }}  />
+                    <span className="font-medium text-xs md:text-sm px-2 py-0.5 rounded-md text-black absolute not-md:bottom-4 not-md:left-4 md:top-2 md:right-2  bg-emerald-200" >
                         ${product.price.toLocaleString()}
                     </span>
                     <div className="absolute bottom-2  flex items-center gap-2 right-2 z-1" >
@@ -45,12 +36,12 @@ export async function ProductCard({product}: ProductCardProps) {
                         <ProductLikeBtn product={product} />
                     </div>
             </div>
-            <div className="p-2  pr-0 flex gap-0.5 flex-col justify-between" >
+            <div className="p-2 not-md:col-span-2  pr-0 flex gap-0.5 flex-col justify-between" >
                 <div>
                     <div className="flex justify-between " >
-                        <h3 className=" truncate " >{product.name}</h3>
+                        <h3 className=" truncate w-[90%] " >{product.name}</h3>
                     </div>
-                    <p className="text-xs font-light tracking-wider line-clamp-2" >{product.description}</p>
+                    <p className="text-xs text-zinc-700 dark:text-zinc-300 leading-tight line-clamp-2" >{product.description}</p>
                 </div>
                 <div className="text-yellow-400 items-center flex px- z-1 gap-1" >
                     {
