@@ -15,24 +15,24 @@ import { ProductCard } from "@/components/products/product-card";
 import { getSellers, getUser } from "@/action/user";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-enum Filters {
-    REELS,
-    PRODUCTS,
-    SELLERS,
-}
 
 interface SearchPageProps {
-  searchParams?: {
+    
+  searchParams?: Promise< {
     filter?: string;
     search?: string;
-  };
+  }>;
 }
 
-export default async function Search({searchParams}:SearchPageProps) {
+export default async function Search({ searchParams }:SearchPageProps) {
+    const params = await searchParams;
+    const filter = params?.filter ?? "";
+    const search = params?.search ?? "";
+
     const { user } = await validateRequest()
     const { cartItems } = await getCartItems();
-    const  reels  = await fetchReels(searchParams?.search);
-    const products = await fetchProducts(undefined,searchParams?.search);
+    const  reels  = await fetchReels(search);
+    const products = await fetchProducts(undefined,search);
     const sellers = await getSellers()
     if (!user) {
         redirect('/login')
@@ -48,7 +48,7 @@ export default async function Search({searchParams}:SearchPageProps) {
                 <Navbar cartItems={cartItems}  mode="dark" inApp={true} user={userInfo} />
                 <div className="max-w-7xl w-full h-[90dvh] md:grid lg:grid-cols-5 relative pt-1">
                     <ContentFilterButtons/>
-                    {searchParams?.filter === "reels" && (
+                    {filter === "reels" && (
                     <ScrollArea className="col-span-4 h-[89dvh] ">
                         <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 p-4 pt-16">
                         {reels.map((reel) => (
@@ -58,7 +58,7 @@ export default async function Search({searchParams}:SearchPageProps) {
                     </ScrollArea>
                     )}
                     {
-                        searchParams?.filter === 'products' &&
+                        filter === 'products' &&
                         <ScrollArea className="col-span-4 h-[89dvh] ">
                             <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 p-4 pt-16">
                                 {

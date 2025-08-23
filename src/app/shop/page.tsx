@@ -13,13 +13,18 @@ import { getUser } from "@/action/user";
 
 
 interface ShopPageProps {
-  searchParams: {
+  searchParams: Promise< {
     category?: string
     search?: string
-  }
+  }>
 }
 
 export default async function Shop({ searchParams }: ShopPageProps) {
+
+const params = await searchParams;
+const category = params?.category ?? "";
+const search = params?.search ?? "";
+
 const { user } = await validateRequest();
 if (!user) {
   redirect("/login");
@@ -30,7 +35,7 @@ const { user: userInfo } = await getUser(user.id);
 
 const { cartItems } = await getCartItems();
 const { categories } = await getProductCategory();
-const products = await fetchProducts(searchParams.category, searchParams.search);
+const products = await fetchProducts(category, search);
 
 return (
   <SidebarProvider>
