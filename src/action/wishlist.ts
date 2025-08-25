@@ -23,7 +23,8 @@ export async function fetchWishlists() {
                             select: {
                                 username: true,
                                 email: true,
-                                id: true
+                                id: true,
+                                avatarUrl: true,
                             }
                         },
                         cartItems: {
@@ -47,7 +48,7 @@ export async function fetchWishlists() {
                                 },
                             },
                         },
-                        wishlist: true
+                        wishlist: true,
                     }
                 }
             }
