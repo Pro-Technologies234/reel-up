@@ -79,18 +79,6 @@ export function ReelLikeBtn({ reel, currentUserId }: ReelLikeBtnProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [likes, setLikes] = useState(reel.likes.length)
 
-
-    useEffect(() => {
-        async function fetchUser() {
-            const { user } = await validateRequest()
-            if (user) {
-            setIsLiked(reel.likes.some(like => like.userId === user.id))
-            }
-        }
-    fetchUser()
-    }, [reel])
-
-
   useEffect(() => {
     setIsLiked(reel.likes.some(like => like.userId === currentUserId))
     setLikes(reel.likes.length)
@@ -116,9 +104,9 @@ export function ReelLikeBtn({ reel, currentUserId }: ReelLikeBtnProps) {
       <Button
         size={"icon"}
         onClick={setLike}
-        className={`group ${isLiked
-          ? "bg-yellow-300 hover:bg-yellow-400 text-black"
-          : "bg-zinc-950 hover:bg-black text-white"
+        className={`group dark:bg-zinc-950 dark:hover:bg-zinc-900 hover:bg-zinc-50 bg-white  ${isLiked
+          ? "text-rose-600 "
+          : " text-black dark:text-white"
         } cursor-pointer z-10 backdrop-blur-xl rounded-xl`}
         aria-label="Like"
       >
@@ -126,12 +114,12 @@ export function ReelLikeBtn({ reel, currentUserId }: ReelLikeBtnProps) {
           <Loader2 className="animate-spin" />
         ) : (
           <Heart
-            className={isLiked ? "fill-black" : ""}
+            className={isLiked ? "fill-rose-600 duration-0" : ""}
             fill={isLiked ? "currentColor" : "none"}
           />
         )}
       </Button>
-      <span className="text-white text-lg font-normal">{likes}</span>
+      <span className="dark:text-white text-black text-lg font-normal">{likes}</span>
     </div>
   )
 }

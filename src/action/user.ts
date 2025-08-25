@@ -153,6 +153,7 @@ export async function becomeSeller(_:any, data: BecomeSellerFormType): Promise<{
                 bussinessAddress,
                 bussinessRegistrationNumber,
                 bussinessType,
+                isSeller: true,
                 ...(bussinessCategory && {
                     bussinessCategory: {
                         connect: bussinessCategory.map((name) => ({ name })),
@@ -178,6 +179,27 @@ export async function getBussinessCategory() {
         return bussinessCategories
 
     } catch {
+        return []
+    }
+}
+
+export async function handleSearchHistory() {
+    try {
+        const { user } = await validateRequest()
+
+        if (!user) {
+            return []
+        }
+        const searchHistories = await prisma.searchHistory.findMany({
+            where: {
+                searchedById: user.id
+            }
+        })
+
+        return searchHistories
+
+    } catch(error: any) {
+        console.log('Unable to get search history', error)
         return []
     }
 }

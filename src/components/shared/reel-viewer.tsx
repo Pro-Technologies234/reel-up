@@ -1,14 +1,18 @@
 'use client'
-import { Reels } from "@/action/reel"
+import { deleteReel, Reels } from "@/action/reel"
 import { useEffect, useRef, useState, useCallback } from "react"
 import { twMerge } from "tailwind-merge"
 import { Button } from "../ui/button"
-import { Eye, Heart, Pause, Play, Share, VolumeOff } from "lucide-react"
+import { Eye, Heart, MoreHorizontal, Play, Share, Trash2, Volume2, VolumeOff } from "lucide-react"
 import { Card, CardContent } from "../ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
 import { ChevronUp, ChevronDown } from "lucide-react";
 import { ProfileCover } from "../reel/reel-client"
 import { ReelLikeBtn } from "./like-btn"
+import { toast } from "sonner"
+import { useRouter } from "next/navigation"
+import { Popover, PopoverAnchor, PopoverContent, PopoverTrigger } from "../ui/popover"
+import { Switch } from "../ui/switch"
 
 type ReelViewerProps = {
     reel: Reels[0]
@@ -16,8 +20,6 @@ type ReelViewerProps = {
 
 export function ReelViewer({reel}:ReelViewerProps) {
     
-
-
     return(
         <div className="aspect-[9/13] space-y-2" >
             <Card className="relative w-full h-[90%] overflow-hidden rounded-lg md:rounded-xl">
@@ -48,9 +50,9 @@ export function ReelViewer({reel}:ReelViewerProps) {
                     </p>
                 </div>
                 <div className="flex gap-2 text-shadow p-0.5 rounded-xl" >
-                    <Avatar className="h-8 md:h-10 w-8 md:w-10 rounded-lg overflow-hidden" >
+                    <Avatar className="h-8 md:h-10 w-8 md:w-10 flex items-center justify-center uppercase bg-emerald-800 rounded-lg overflow-hidden" >
                         <AvatarImage src={ reel.createdBy?.avatarUrl || "https://github.com/shadcn.png"} className="object-cover w-full h-full" />
-                        <AvatarFallback  className="uppercase bg-emerald-800 text-white" >{reel.createdBy?.username?.[0]}</AvatarFallback>
+                        <AvatarFallback  className="text-white" >{reel.createdBy?.username?.[0]}</AvatarFallback>
                     </Avatar>
                     <div className="flex flex-col " >
                         <span className="text-sm" > 
@@ -98,8 +100,11 @@ export const VideoViewer = ({video, className}:{video: {url: string, autoPlay?: 
 
 
 
-export default function ReelScroller({reels}:{reels: Reels}) {
+export default function ReelScroller({reels, currentUserId}:{reels: Reels, currentUserId: string}) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [activeReel, setActiveReel] = useState<Reels[0]>(reels[0])
+  const [muted,setMuted] = useState(false)
+  const [autoPlay,setAutoPlay] = useState(false)
 
   // handle arrow keys (desktop)
   const handleKey = useCallback((e: KeyboardEvent) => {
@@ -130,7 +135,7 @@ export default function ReelScroller({reels}:{reels: Reels}) {
   };
 
   return (
-    <div className="flex flex-col h-full dark:bg-zinc-900 bg-zinc-100 text-white p-2">
+    <div className="flex flex-col h-full dark:bg-zinc-900 bg-zinc-100 text-white sm:p-2">
       {/* Reel container */}
       <div
         className="flex-1 relative overflow-hidden"
@@ -144,14 +149,48 @@ export default function ReelScroller({reels}:{reels: Reels}) {
           }}
         >
           {reels.map((reel,indx) => (
-            <ReelPlayer key={reel.id} reel={reel} active={activeIndex === indx} />
+            <ReelPlayer 
+              onPlayNext={()=>setActiveIndex((prev) => Math.min(prev + 1, reels.length - 1))} 
+              key={reel.id} 
+              reel={reel} 
+              active={activeIndex === indx} 
+              muted={muted} 
+              autoPlay={autoPlay}
+              onActiveChange={setActiveReel} 
+            />
           ))}
         </div>
-
+        <div  className="z-1 h-full absolute right-3/11  -translate-y-2/3 flex flex-col items-center gap-6">
+          <ProfileCover reel={activeReel} />
+          <ReelLikeBtn reel={activeReel} currentUserId={currentUserId} />
+          <Button
+            size={"icon"}
+            className="rounded-full p-4 bg-black/40 text-white hover:bg-black/70 backdrop-blur-md transition"
+            aria-label="Share"
+          >
+            <Share size={24} />
+          </Button>
+          <Button
+            size={"icon"}
+            onClick={()=>setMuted(!muted)}
+            className="rounded-full p-4 bg-black/40 text-white hover:bg-black/70 backdrop-blur-md transition"
+            aria-label="Mute"
+          >
+            {
+              muted ?
+              <VolumeOff size={24} />
+              :
+              <Volume2 size={24} />
+            }
+          </Button>
+          <ReelMorePopover 
+            onChangeAutoplay={setAutoPlay}
+           />
+        </div>
         {/* Controls (desktop) */}
         <Button
           size={'icon'}
-          className="cursor-pointer absolute top-1/3 left-4 text-white dark:bg-black rounded-full darkhover:bg-zinc-950"
+          className="cursor-pointer absolute top-1/3 not-sm:hidden right-4 text-white dark:bg-black rounded-full darkhover:bg-zinc-950"
           onClick={() =>
             setActiveIndex((prev) => Math.max(prev - 1, 0))
           }
@@ -160,7 +199,7 @@ export default function ReelScroller({reels}:{reels: Reels}) {
         </Button>
         <Button
           size={'icon'}
-          className="cursor-pointer absolute bottom-1/3 left-4 text-white dark:bg-black rounded-full darkhover:bg-zinc-950"
+          className="cursor-pointer absolute bottom-1/3 not-sm:hidden right-4 text-white dark:bg-black rounded-full darkhover:bg-zinc-950"
           onClick={() =>
             setActiveIndex((prev) => Math.min(prev + 1, reels.length - 1))
           }
@@ -176,10 +215,15 @@ export default function ReelScroller({reels}:{reels: Reels}) {
 export type  ReelPlayerProps = {
     reel: Reels[0]
     active: boolean
+    muted: boolean
+    autoPlay: boolean
+    onPlayNext: ()=>void
+    onActiveChange: (reel: Reels[0])=>void
 }
 
 
-export const ReelPlayer = ({ reel, active }: ReelPlayerProps) => {
+export const ReelPlayer = ({ reel, active, muted, autoPlay, onPlayNext, onActiveChange }: ReelPlayerProps) => {
+  const router = useRouter()
   const videoElement = useRef<HTMLVideoElement>(null)
   const [isPlaying, setIsPlaying] = useState(false)
   const [playTime, setPlayTime] = useState(0)
@@ -202,6 +246,11 @@ export const ReelPlayer = ({ reel, active }: ReelPlayerProps) => {
     }
   }, [])
 
+  useEffect(()=>{
+    autoPlay &&
+      onPlayNext()
+  },[videoElement.current &&  playTime > videoElement.current.duration - 0.1])
+
   // handle play / pause depending on "active"
   useEffect(() => {
     const video = videoElement.current
@@ -210,6 +259,7 @@ export const ReelPlayer = ({ reel, active }: ReelPlayerProps) => {
     if (active) {
       if (video.paused) {
         video.play()
+        video.currentTime = 0
         setIsPlaying(true)
       }
     } else {
@@ -218,6 +268,7 @@ export const ReelPlayer = ({ reel, active }: ReelPlayerProps) => {
         setIsPlaying(false)
       }
     }
+    onActiveChange(reel)
   }, [active])
 
   function handlePlayPause() {
@@ -231,11 +282,26 @@ export const ReelPlayer = ({ reel, active }: ReelPlayerProps) => {
     }
   }
 
+
+  async function deleteThisReel() {
+    const result = await deleteReel(reel.id)
+    
+    if (result.success) {
+      toast.success(result.success)
+      router.refresh()
+    } else {
+      toast.error(result.error)
+    }
+  }
+
   return (
     <div
-      onClick={handlePlayPause}
-      className="h-full relative flex items-center justify-center m-auto rounded-xl aspect-[9/16] dark:bg-black bg-white text-3xl font-bold"
+      
+      className="h-full relative overflow-hidden flex items-center justify-center m-auto rounded-2xl sm:aspect-[9/16] dark:bg-black bg-white"
     >
+      {/* <Button size={'icon'} variant={'destructive'} onClick={deleteThisReel} className="z-10 cursor-pointer absolute top-2 right-2" >
+        <Trash2/>
+      </Button> */}
       {/* Video */}
       <div className="absolute inset-0">
         <video
@@ -244,47 +310,39 @@ export const ReelPlayer = ({ reel, active }: ReelPlayerProps) => {
           className="w-full h-full"
           loop
           playsInline
+          muted={muted}
         />
       </div>
 
       {/* Play Icon Overlay */}
-      <div className="z-10">
+      <div onClick={handlePlayPause} className="z-10 w-full h-full flex items-center justify-center">
         {active && !isPlaying && (
           <div className="p-4 rounded-full">
-            <Pause />
+            <Play />
           </div>
         )}
       </div>
 
       {/* Progress bar */}
       <div className="absolute bottom-0 left-0 right-0">
-        <VideoProgressBar
-        playTime={playTime}
-        maxPlayTime={videoElement.current ? videoElement.current?.duration : 0}
-        onSeek={(time) => {
-            if (videoElement.current) {
-            videoElement.current.currentTime = time;
-            }
-        }}
-        />
+        {
+          active &&
+          <VideoProgressBar
+          playTime={playTime}
+          maxPlayTime={videoElement.current ? videoElement.current?.duration : 0}
+          onSeek={(time) => {
+              if (videoElement.current) {
+              videoElement.current.currentTime = time;
+              }
+          }}
+          />
+        }
       </div>
-      <div className="absolute top-1/2 -right-20 -translate-y-1/2 flex flex-col items-center gap-6">
-        <ProfileCover />
-        <ReelLikeBtn reel={reel} />
-        <Button
-          size={"icon"}
-          className="rounded-full p-4 bg-black/40 text-white hover:bg-black/70 backdrop-blur-md transition"
-          aria-label="Share"
-        >
-          <Share size={24} />
-        </Button>
-        <Button
-          size={"icon"}
-          className="rounded-full p-4 bg-black/40 text-white hover:bg-black/70 backdrop-blur-md transition"
-          aria-label="Mute"
-        >
-          <VolumeOff size={24} />
-        </Button>
+
+      <div className="absolute bottom-0 left-0 right-0 p-4" >
+        <h4 className="text-sm" >
+          {reel.caption}
+        </h4>
       </div>
     </div>
   )
@@ -328,7 +386,7 @@ export function VideoProgressBar({
   return (
     <div
       ref={barRef}
-      className="relative w-full h-1 bg-gray-300 rounded cursor-pointer"
+      className="relative z-10 w-full h-1 bg-gray-400 rounded cursor-pointer"
       onClick={handleSeek}
       onMouseDown={() => setIsDragging(true)}
       onMouseUp={() => setIsDragging(false)}
@@ -336,15 +394,39 @@ export function VideoProgressBar({
     >
       {/* Progress fill */}
       <div
-        className="absolute top-0 left-0 h-1 bg-yellow-300 rounded"
+        className="absolute top-0 left-0 h-1 bg-gradient-to-r from-rose-500 to-rose-600 rounded"
         style={{ width: `${progressPercent}%` }}
       />
 
       {/* Thumb (draggable handle) */}
       <div
-        className="absolute top-1.5 w-2 h-2 bg-yellow-100 rounded-full -translate-y-1/2"
+        className="absolute top-1 w-1 h-1 bg-white rounded-full -translate-y-1/2"
         style={{ left: `${progressPercent}%`, transform: "translate(-50%, -50%)" }}
       />
     </div>
   );
+}
+
+interface PopoverMoreProps {
+  onChangeAutoplay: (autoPlay: boolean)=> void
+}
+
+export const ReelMorePopover = ({onChangeAutoplay}:PopoverMoreProps) => {
+  return (
+    <Popover>
+      <PopoverTrigger>
+        <Button size={'icon'} className="rounded-full" >
+          <MoreHorizontal/>
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent>
+        <div className="grid grid-cols-2 items-center" >
+          <span>
+            Autoplay
+          </span>
+          <Switch onCheckedChange={onChangeAutoplay} />
+        </div>
+      </PopoverContent>
+    </Popover>
+  )
 }

@@ -105,8 +105,8 @@ export function Navbar({ mode = 'light', inApp, user, cartItems }: NavbarProps) 
         <ModeToggle/>
         <CartDropdown cartItems={cartItems} />
         <Link href={'/settings/profile'} >
-          <Avatar className=" rounded-lg" >
-            <AvatarImage src={ user?.avatarUrl || "https://github.com/shadcn.png"} />
+          <Avatar className=" rounded-lg overflow-hidden" >
+            <AvatarImage src={ user?.avatarUrl || "https://github.com/shadcn.png"} className="object-cover w-full h-full" />
             <AvatarFallback  className="uppercase bg-emerald-800 text-white" >{user?.username?.[0]}</AvatarFallback>
           </Avatar>
         </Link>

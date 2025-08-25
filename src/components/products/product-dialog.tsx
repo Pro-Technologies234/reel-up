@@ -14,11 +14,13 @@ import { useEffect, useState } from "react";
 import { AddToCart } from "../shared/add-cart-item";
 import { ScrollArea } from "../ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Products } from "@/action/products";
+import { deleteProduct, Products } from "@/action/products";
 import { FollowBtn, ImageSetter, ImageViewer } from "./product-client";
 import { ProductLikeBtn } from "../shared/like-btn";
 import { WishlistBtn } from "./product-client";
 import { PriceTag } from "../shared/price-tag";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 type ProductInfoProps = {
     product: Products[0]
@@ -26,12 +28,27 @@ type ProductInfoProps = {
 
 export function ProductInfoDialog({ product }: ProductInfoProps) {
     const [currentImg, setCurrentImg] = useState('')
-
+    const router = useRouter()
+    const [loading,setLoading] = useState(false)
     useEffect(() => {
         if (product.images && product.images.length > 0) {
             setCurrentImg(product.images[0].url);
         }
     }, [product.images]);
+
+
+    async function deleteThisProduct() {
+        setLoading(true)
+        const result = await deleteProduct(product.id)
+        if (result.success) {
+            toast.success(result.success)
+            router.refresh()
+        } else {
+            toast.error(result.error)
+        }
+        setLoading(false)
+    }
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -74,8 +91,8 @@ export function ProductInfoDialog({ product }: ProductInfoProps) {
                 </div>
                 <div className="flex items-center gap-2">
                     <div className="flex gap-2" >
-                        <Avatar className="w-15 h-15 rounded-xl z-1" >
-                                <AvatarImage src="https://github.com/shadcn.png" />
+                        <Avatar className="w-15 h-15 rounded-xl z-1 overflow-hidden" >
+                                <AvatarImage src={ product.createdBy.avatarUrl || "https://github.com/shadcn.png"} className="object-cover w-full h-full" />
                                 <AvatarFallback className="uppercase rounded-xl" >{product.createdBy?.username[0]}</AvatarFallback>
                         </Avatar>
                         <div className="flex flex-col" >
@@ -97,6 +114,13 @@ export function ProductInfoDialog({ product }: ProductInfoProps) {
                 </div>
             </div>
             <DialogFooter className="sm:justify-end not-md:mt-4">
+                <Button onClick={deleteThisProduct} className="cursor-pointer bg-red-600 hover:bg-red-500 text-white" >
+                    {
+                        !loading ? 
+                        'Delete Product' : 
+                        'Deleting...'
+                    }
+                </Button>
             <DialogClose asChild>
                 <Button type="button">
                 Close

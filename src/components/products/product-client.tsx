@@ -59,6 +59,7 @@ type WishlistBtnProps = {
 }
 
 export const WishlistBtn = ({ wishlist, productId }: WishlistBtnProps) => {
+  const router = useRouter()
   // Check if already in wishlist using `.some()`
   const [inWishlist, setInWishlist] = useState(
     wishlist?.some(item => item.productId === productId) || false
@@ -73,8 +74,8 @@ export const WishlistBtn = ({ wishlist, productId }: WishlistBtnProps) => {
       toast.error(error)
     } else {
       setInWishlist(wishlisted || false)
+      router.refresh()
     }
-
     setIsLoading(false)
   }
 

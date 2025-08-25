@@ -32,11 +32,6 @@ export async function uploadImage(file: File): Promise<string | null> {
 }
 
 
-
-
-
-
-
 export async function deleteImage(url: string): Promise<{ success?: string; error?: string }> {
   try {
     let relativePath: string;
@@ -53,5 +48,25 @@ export async function deleteImage(url: string): Promise<{ success?: string; erro
   } catch (error: any) {
     console.error("Failed to delete image:", error);
     return { error: error?.message ?? "Failed to delete image" };
+  }
+}
+
+
+export async function deleteVideo(url: string): Promise<{ success?: string; error?: string }> {
+  try {
+    let relativePath: string;
+    if (url.startsWith("http")) {
+      relativePath = new URL(url).pathname;
+    } else {
+      relativePath = url;
+    }
+
+    const filePath = path.join(process.cwd(), "public", relativePath);
+    await fs.unlink(filePath);
+
+    return { success: "Video deleted successfully" };
+  } catch (error: any) {
+    console.error("Failed to delete Video:", error);
+    return { error: error?.message ?? "Failed to delete video" };
   }
 }

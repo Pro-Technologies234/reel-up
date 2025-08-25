@@ -39,7 +39,7 @@ export default async function Discover() {
 
           {/* Fullscreen reel scroll area */}
           <div className="flex-1 w-full overflow-y-scroll snap-y snap-mandatory no-scrollbar">
-            <ReelScroller reels={reels} />
+            <ReelScroller reels={reels} currentUserId={user.id} />
             {/* {reels.map((reel) => (
               <div
                 key={reel.id}

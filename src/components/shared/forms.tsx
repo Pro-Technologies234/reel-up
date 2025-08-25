@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { BecomeSellerForm, BecomeSellerFormType, CreateProductForm, CreateProductFormType, CreateReelForm, CreateReelFormType } from '@/lib/schema';
 import { createProduct, getProductCategory } from "@/action/products";
 import { toast } from 'sonner';
-import { redirect } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import { ImageUploader } from "./image-uploader"; // <- Make sure it's connected
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose, DialogDescription } from "@/components/ui/dialog";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
@@ -30,11 +30,6 @@ export function CreateProductDialog() {
   const [loading, setLoading] = useState(false)
   const [open,setOpen] = useState(false)
   const [category, setCategory] = useState<ProductCategory[]>([])
-
-  useEffect(()=>{
-    toast.success(images)
-  },[images])
-
   const form = useForm<CreateProductFormType>({
     resolver: zodResolver(CreateProductForm),
     defaultValues: {
@@ -173,6 +168,7 @@ export function CreateProductDialog() {
 
 
 export function CreateReelDialog() {
+  const rounter  = useRouter()
   const [video, setVideo] = useState('');
   const [loading, setLoading] = useState(false)
   const [open,setOpen] = useState(false)
@@ -205,10 +201,10 @@ export function CreateReelDialog() {
       toast.error(result.error);
       setLoading(false);
     } else {
-      toast.success(result.success!);
+      toast.success(result.success);
       setLoading(false);
       setOpen(false)
-      redirect('/disover');
+      redirect('/discover');
     }
   }
 
@@ -220,7 +216,7 @@ export function CreateReelDialog() {
           Create a reel
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[625px]  rounded-3xl grid md:grid-cols-2">
+      <DialogContent className="sm:max-w-[625px] h-[80dvh]  rounded-3xl grid md:grid-cols-2">
         {/* <ImageUploader images={images} setImages={setImages} /> */}
         <VideoInput setVideo={(prev)=>setVideo(prev || '')} />
         <div className="space-y-4">

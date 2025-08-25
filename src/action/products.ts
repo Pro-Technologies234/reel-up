@@ -7,6 +7,7 @@ import { mkdir } from "fs/promises";
 import { writeFile } from 'fs/promises';
 import path from 'path';
 import { v4 as uuidv4 } from "uuid";
+import { deleteImage } from "./utils";
 
 export type FetchProductsResponse = {
     products: Product[];
@@ -34,7 +35,8 @@ export async function fetchProducts(categoryName?: string, productName?: string,
                   select: {
                     username: true,
                     email: true,
-                    id: true
+                    id: true,
+                    avatarUrl: true,
                   }
                 },
                 cartItems: {
@@ -58,7 +60,7 @@ export async function fetchProducts(categoryName?: string, productName?: string,
                     },
                   }
                 },
-                wishlist: true
+                wishlist: true,
             }
         });
 
@@ -300,4 +302,28 @@ export async function saveImage(img: string, folder: 'uploads', ) {
     await writeFile(filePath, buffer);
     const url = `/${folder}/${fileName}`
     return url
+}
+
+export async function deleteProduct(productId: string): Promise<{error?: string, success?: string}> {
+  try {
+    console.log(productId)
+    const deletedProduct = await prisma.product.delete({
+      where : {
+        id: productId
+      },
+      select: {
+        images: true
+      }
+    })
+
+    deletedProduct.images.forEach((img)=>{
+      deleteImage(img.url)
+    })
+
+    return { success: 'This product has been deleted successfully' }
+
+  } catch(error: any) {
+    console.log(error.message)
+    return { error: 'Something went wrong' }
+  }
 }

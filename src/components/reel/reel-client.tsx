@@ -41,7 +41,7 @@ export function ReelCard({ reel }: ReelCardProps) {
 
       {/* Right-side vertical controls */}
       <div className="absolute top-1/2 right-6 -translate-y-1/2 flex flex-col items-center gap-6">
-        <ProfileCover />
+        <ProfileCover reel={reel || undefined} />
         <ReelLikeBtn reel={reel} />
         <Button
           size={"icon"}
@@ -64,13 +64,13 @@ export function ReelCard({ reel }: ReelCardProps) {
 
 
 
-export const ProfileCover = ()=> {
+export const ProfileCover = ({reel}:{reel: Reels[0]})=> {
     return (
         <div className=" h-15 w-15 rounded-2xl relative" >
-            <div className="absolute inset-0 outline-4 outline-red-500 outline-offset-3 rounded-2xl animate-pulse" >
-            </div>
-            <Avatar className=" rounded-lg w-full h-full" >
-                <AvatarImage src="https://github.com/shadcn.png" />
+            {/* <div className="absolute inset-0 outline-4 outline-red-500 outline-offset-3 rounded-2xl animate-pulse" >
+            </div> */}
+            <Avatar className=" rounded-2xl w-full h-full overflow-hidden" >
+                <AvatarImage src={reel.createdBy.avatarUrl || "https://github.com/shadcn.png"} className="object-cover w-full h-full" />
                 <AvatarFallback  className="uppercase bg-white rounded-2xl text-black" >P</AvatarFallback>
             </Avatar>
             <div className="absolute -bottom-3 w-full flex justify-center" >

@@ -6,6 +6,7 @@ import { writeFile } from 'fs/promises';
 import path from 'path';
 
 import { CreateReelForm } from "@/lib/schema";
+import { deleteVideo } from "./utils";
 
 export async function createReel(_: any, data: { name: string; caption: string; video: string }): 
 Promise<{ error?: string; success?: string }> {
@@ -66,7 +67,7 @@ export async function fetchReels(search?: string) {
 
         const reels = await prisma.reel.findMany({
             where: {
-                ...(search && { name: {contains: search} })
+                ...(search && { caption: {contains: search} })
             },
             include: {
                 likes: true,
@@ -120,6 +121,24 @@ export async function likeReel(reelId: string) {
         }
     } catch(error: any) {
         console.log(error.message)
+        return { error: 'Something went wrong' }
+    }
+}
+
+
+export async function deleteReel(reelId: string) {
+    try {
+
+        const deletedReel = await prisma.reel.delete({
+            where: {
+                id: reelId
+            }
+        })
+
+        deleteVideo(deletedReel.url)
+        return { success: 'Reel Deleted Successfully' }
+
+    } catch(error: any) {
         return { error: 'Something went wrong' }
     }
 }

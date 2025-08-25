@@ -30,7 +30,7 @@ export default async function Wishlist() {
             <div className="dark:bg-black h-dvh w-full flex flex-col">
                 <Navbar mode="dark" inApp={true} user={userInfo} cartItems={cartItems} />
                 <div className="w-full h-[90%]  relative ">
-                    <ScrollArea className="h-full w-full dark:bg-zinc-950 bg-zinc-50 grid grid-cols-4 gap-4 p-4 pt-15 overflow-y-auto">
+                    <ScrollArea className="h-full w-full dark:bg-zinc-950 bg-zinc-50 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4 pt-16 overflow-y-auto">
                         {
                             wishlists.map((wishlist, index) => (
                                 <ProductCard key={index} product={wishlist.product} />
