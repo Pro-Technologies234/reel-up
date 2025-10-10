@@ -1,7 +1,10 @@
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
-import { ArrowLeft, Search } from "lucide-react";
+import { ArrowLeft, History, Search, Trash2 } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem } from "../ui/dropdown-menu";
+import { getSearchHistory, handleSearchHistory } from "@/action/user";
+import { SearchHistory } from "@/lib/prisma";
 
 export function SearchBar() {
   const router = useRouter();
@@ -9,11 +12,20 @@ export function SearchBar() {
   const currentFilter = searchParams.get("filter");
   const [query, setQuery] = useState(searchParams.get("search") || "");
   const [isOpen, setIsOpen] = useState(false);
-
-  const handleSearch = (e: React.FormEvent) => {
+  const [histories, setHistories] = useState<SearchHistory[]>([])
+  useEffect(()=>{
+    async function fetchHistories() {
+      const searchHistories = await getSearchHistory()
+      setHistories(searchHistories)
+    }
+    fetchHistories()
+  },[])
+  
+  const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     const filterPart = currentFilter ? `filter=${currentFilter}&` : "";
     router.push(`/search?${filterPart}search=${encodeURIComponent(query)}`);
+    await handleSearchHistory(query)
     setIsOpen(false); // close modal after search on mobile
   };
 
@@ -26,70 +38,100 @@ export function SearchBar() {
           className="fixed inset-0 w-full h-full bg-black/30 z-20 md:hidden"
         />
       )}
-      {/* Desktop search bar */}
-      <div className="hidden md:flex items-center w-full">
-        <form
-          onSubmit={handleSearch}
-          className="w-full md:w-80 flex items-center dark:bg-zinc-950 bg-zinc-50 dark:text-white  rounded-2xl border dark:border-zinc-800 border-zinc-200 z-10"
-        >
-          <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search"
-            className="p-2 px-4 focus:outline-none border-none outline-none w-full"
-          />
-          <Button
-            type="submit"
-            size={"icon"}
-            className="rounded-xl scale-80 bg-yellow-300 hover:bg-yellow-400 text-black cursor-pointer"
-          >
-            <Search />
-          </Button>
-        </form>
-      </div>
-      {/* Mobile search button */}
-      <div className="flex md:hidden items-center w-full">
-        {!isOpen && (
-          <Button
-            onClick={() => setIsOpen(true)}
-            className="rounded-xl w-full bg-yellow-300 hover:bg-yellow-400 text-black cursor-pointer"
-          >
-            <Search />
-            Search
-          </Button>
-        )}
-      </div>
-      {/* Mobile modal search bar */}
-      {isOpen && (
-        <div className="fixed left-0 right-0 top-0 z-30 px-4 gap-4 dark:bg-black bg-white py-2 md:hidden flex items-center w-full">
-          <Button
-            onClick={() => setIsOpen(false)}
-            variant={"ghost"}
-            size={"icon"}
-            className="z-30"
-          >
-            <ArrowLeft />
-          </Button>
-          <form
-            onSubmit={handleSearch}
-            className="w-full flex items-center dark:bg-zinc-950 bg-zinc-50 dark:text-white p-1 rounded-2xl border dark:border-zinc-800 border-zinc-200 z-10"
-          >
-            <input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search"
-              className="p-2 focus:outline-none border-none outline-none w-full"
-            />
-            <Button
-              type="submit"
-              size={"icon"}
-              className="rounded-xl bg-yellow-300 hover:bg-yellow-400 text-black cursor-pointer"
+          {/* Desktop search bar */}
+          <div className="relative hidden md:flex items-center w-full">
+            <form
+              onSubmit={handleSearch}
+              className="w-full md:w-[30dvw] flex items-center dark:bg-zinc-950 bg-zinc-50 dark:text-white  rounded-2xl border dark:border-zinc-800 border-zinc-200 z-10"
             >
-              <Search />
-            </Button>
-          </form>
-        </div>
-      )}
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search"
+                className="p-2 px-4 focus:outline-none border-none outline-none w-full"
+              />
+              <Button
+                type="submit"
+                size={"icon"}
+                className="rounded-xl scale-80 bg-yellow-300 hover:bg-yellow-400 text-black cursor-pointer"
+              >
+                <Search />
+              </Button>
+            </form>
+            {/* <div className="absolute top-10 space-y-2 left-0 right-0 h-50 bg-zinc-900 rounded-2xl p-4" >
+              {
+                query &&
+                <div className="w-full border-l-2 overflow-hidden rounded-l-none border-yellow-400 flex gap-1.5 items-center p-2 rounded-xl bg-zinc-800" >
+                  <Search size={18} />
+                  <span className="line-clamp-1 r" >
+                    {query} <span className="text-zinc-400" > - Reelup Search</span> 
+                  </span>
+                </div>
+              }
+              {
+                
+                histories.map((searchHistory)=>(
+                <div className="group w-full flex  items-center justify-between px-2 py-0.5 rounded-xl bg-zinc-800" >
+                  <div className="flex items-center gap-1.5" >
+                    <History size={18} />
+                    <span>
+                      {searchHistory.keyword}
+                    </span>
+                  </div>
+                  <Button variant={'ghost'} size={'icon'} className="group-hover:opacity-100 opacity-0" >
+                    <Trash2/>
+                  </Button>
+                </div>
+                ))
+              }
+              <span className="p-2 px-4 text-xs rounded-full border m-auto" >
+                Recent Searches
+              </span>
+            </div> */}
+          </div>
+          {/* Mobile search button */}
+          <div className="flex md:hidden items-center w-full">
+            {!isOpen && (
+              <Button
+                onClick={() => setIsOpen(true)}
+                className="rounded-xl w-full bg-yellow-300 hover:bg-yellow-400 text-black cursor-pointer"
+              >
+                <Search />
+                Search
+              </Button>
+            )}
+          </div>
+          {/* Mobile modal search bar */}
+          {isOpen && (
+            <div className="fixed left-0 right-0 top-0 z-30 px-4 gap-4 dark:bg-black bg-white py-2 md:hidden flex items-center w-full">
+              <Button
+                onClick={() => setIsOpen(false)}
+                variant={"ghost"}
+                size={"icon"}
+                className="z-30"
+              >
+                <ArrowLeft />
+              </Button>
+              <form
+                onSubmit={handleSearch}
+                className="w-full flex items-center dark:bg-zinc-950 bg-zinc-50 dark:text-white p-1 rounded-2xl border dark:border-zinc-800 border-zinc-200 z-10"
+              >
+                <input
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Search"
+                  className="p-2 focus:outline-none border-none outline-none w-full"
+                />
+                <Button
+                  type="submit"
+                  size={"icon"}
+                  className="rounded-xl bg-yellow-300 hover:bg-yellow-400 text-black cursor-pointer"
+                >
+                  <Search />
+                </Button>
+              </form>
+            </div>
+          )}
     </>
   );
 }

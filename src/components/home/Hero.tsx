@@ -20,11 +20,11 @@ export function Hero() {
             and fostering vibrant communities.
           </p>
           <div className="space-x-5 mt-5">
-            <Button className="rounded-full cursor-pointer">
+            <Button className="rounded-full bg-black hover:bg-black text-white cursor-pointer">
               Get Started For Free!
             </Button>
             <Link href={'/register'} >
-              <Button variant={"outline"} className="rounded-full cursor-pointer">
+              <Button variant={"outline"} className="rounded-full hover:text-black bg-white dark:bg-white cursor-pointer">
                 Book a Demo
               </Button>
             </Link>
@@ -32,33 +32,33 @@ export function Hero() {
           <div className="w-220 not-md:scale-30 mt-15 space-y-2  rounded-2xl bg-black p-2 pb-0 relative">
             <div className="w-full flex justify-between">
               <div className="space-x-2">
-                <Button size={"icon"}>
+                <Button variant={'ghost'} size={"icon"} className="text-white" >
                   <Ellipsis />
                 </Button>
-                <Button size={"icon"}>
+                <Button variant={'ghost'} size={"icon"} className="text-white" >
                   <AppWindowMac />
                 </Button>
-                <Button size={"icon"}>
+                <Button variant={'ghost'} size={"icon"} className="text-white" >
                   <ChevronLeft />
                 </Button>
-                <Button size={"icon"}>
+                <Button variant={'ghost'} size={"icon"} className="text-white" >
                   <ChevronRight />
                 </Button>
               </div>
               <div className="space-x-2 flex">
-                <Button size={"icon"}>
+                <Button variant={'ghost'} size={"icon"} className="text-white" >
                   <ShieldHalf />
                 </Button>
                 <div className="w-80 bg-neutral-900 py-1 rounded-sm"></div>
               </div>
               <div className="space-x-2">
-                <Button size={"icon"}>
+                <Button variant={'ghost'} size={"icon"} className="text-white" >
                   <Upload />
                 </Button>
-                <Button size={"icon"}>
+                <Button variant={'ghost'} size={"icon"} className="text-white" >
                   <Plus />
                 </Button>
-                <Button size={"icon"}>
+                <Button variant={'ghost'} size={"icon"} className="text-white" >
                   <SquareStack />
                 </Button>
               </div>

@@ -83,7 +83,7 @@ export const WishlistBtn = ({ wishlist, productId }: WishlistBtnProps) => {
       <Button
           size={'icon'}
           onClick={setWishlist}
-          className={`group dark:bg-zinc-950 bg-zinc-50 dark:hover:bg-black hover:bg-white ${
+          className={`group border dark:bg-zinc-900 bg-zinc-50 dark:hover:bg-zinc-950 hover:bg-white ${
               inWishlist ? 'text-black dark:text-white' : 'dark:text-white text-black'
           } cursor-pointer z-10 backdrop-blur-xl rounded-xl`}
       >
@@ -100,26 +100,25 @@ export const WishlistBtn = ({ wishlist, productId }: WishlistBtnProps) => {
 }
 
 type FolowProps = {
-  user: Products[0]["createdBy"]
+  isFollowing?: boolean
+  currentUserId: string
 }
 
 
-export const FollowBtn = ({user}:FolowProps)=>{
+export const FollowBtn = ({isFollowing, currentUserId}:FolowProps)=>{
   const [following,setFollowing] = useState(false)
-  const router = useRouter()
+  
   useEffect(()=>{
-    async function fetchFollower() {
-      const { isFollowing } = await checkFollowing(user.id)
-      setFollowing(isFollowing || false)
-      router.refresh()
-    }
-    fetchFollower()
-  },[])
+    if (isFollowing) 
+    setFollowing(isFollowing)
+  },[isFollowing])
+
 
   async function followUser() {
-    const { success, error } = await follow(user.id)
+    const { success, error } = await follow(currentUserId)
     if(success) {
       toast.success(success)
+      setFollowing(!following)
     } else {
       toast.error(error)
     }

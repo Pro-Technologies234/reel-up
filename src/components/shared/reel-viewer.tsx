@@ -317,8 +317,8 @@ export const ReelPlayer = ({ reel, active, muted, autoPlay, onPlayNext, onActive
       {/* Play Icon Overlay */}
       <div onClick={handlePlayPause} className="z-10 w-full h-full flex items-center justify-center">
         {active && !isPlaying && (
-          <div className="p-4 rounded-full">
-            <Play />
+          <div className="p-4 rounded-full bg-rose-600/40 animate-pulse outline-6 outline-rose-600/20">
+            <Play  />
           </div>
         )}
       </div>

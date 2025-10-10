@@ -12,24 +12,19 @@ import { validateRequest } from "@/lib/validate-user";
 
 type LikeBtnProps = {
     product: Products[0] 
+    currentUserId?: string
 }
 
-export function ProductLikeBtn({ product }: LikeBtnProps) {
+export function ProductLikeBtn({ product, currentUserId }: LikeBtnProps) {
     const router = useRouter()
     const [isLiked, setIsLiked] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [likes, setLikes] = useState(0)
 
     useEffect(() => {
-        async function fetchUser() {
-            const { user } = await validateRequest()
-            if (user) {
-            setIsLiked(product.likes.some(like => like.userId === user.id))
-        }
-    }
-        setLikes(product.likes.length ?? 0)
-        fetchUser() 
-    }, [product])
+      setIsLiked(product.likes.some(like => like.userId === currentUserId))
+      setLikes(product.likes.length)
+    }, [product, currentUserId])
 
 
     async function setLike() {
@@ -47,7 +42,7 @@ export function ProductLikeBtn({ product }: LikeBtnProps) {
     return (
         <Button
             onClick={setLike}
-            className={`group dark:bg-zinc-950 bg-zinc-50 dark:hover:bg-black hover:bg-white ${
+            className={`group border dark:bg-zinc-900 bg-zinc-50 dark:hover:bg-zinc-950 hover:bg-white ${
                 isLiked ? 'text-black dark:text-white' : 'dark:text-white text-black'
             } cursor-pointer z-10 backdrop-blur-xl rounded-xl`}
         >

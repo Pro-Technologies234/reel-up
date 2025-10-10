@@ -33,12 +33,17 @@ export default async function Wishlist() {
                     <ScrollArea className="h-full w-full dark:bg-zinc-950 bg-zinc-50 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4 pt-16 overflow-y-auto">
                         {
                             wishlists.map((wishlist, index) => (
-                                <ProductCard key={index} product={wishlist.product} />
+                                <ProductCard key={index} product={wishlist.product} currentUserId={user.id} />
                             ))
 
                         }
                     </ScrollArea>
-                    {/* <CartDropdown cartItems={cartItems} /> */}
+                    {
+                        wishlists.length !> 0 &&
+                        <div className="absolute inset-0 flex items-center justify-center" >
+                            <h3 className="text-2xl font-light dark:text-zinc-500 text-zinc-800 tracking-wider" >No Product on Wishlist Items.</h3>
+                        </div>
+                    }
                 </div>
             </div>
         </SidebarInset>

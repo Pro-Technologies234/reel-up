@@ -1,28 +1,28 @@
-
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {  ProductImage, Product } from "@/lib/prisma";
-import Image from "next/image";
-import default_img from '@/assets/images/home/40019.jpg'
-import { twMerge } from "tailwind-merge";
-import { getUser } from "@/action/user";
 import { ProductInfoDialog } from "./product-dialog";
-import { Button } from "../ui/button";
-import { Bookmark, ThumbsUp } from "lucide-react";
 import { ProductLikeBtn } from "../shared/like-btn";
 import { Products } from "@/action/products";
 import { ImageViewer, WishlistBtn } from "./product-client";
+import { checkFollowing } from "@/action/user";
+import { BufferControllerConfig } from "hls.js";
 
 
 
 export interface ProductCardProps {
     product: Products[0]
+    currentUserId: string
+    owner?: boolean
 }
 
-export async function ProductCard({product}: ProductCardProps) {
-    
+export async function ProductCard({product, owner, currentUserId}: ProductCardProps) {
+    const { isFollowing } = await checkFollowing(product.createdById)
     return(
         <div className="not-md:relative md:aspect-[9/10] h-35 md:h-auto dark:text-white group group-hover:shadow-black/50 relative rounded-2xl md:rounded-3xl dark:bg-zinc-900/50 bg-zinc-100/50 bg- border grid md:grid-rows-3 not-md:grid-cols-3 dark:border-zinc-800 border-zinc-200 shadow-xl shadow-black/10 dark:shadow-black/20  p-2" >
-            <ProductInfoDialog product={product} />
+            <ProductInfoDialog 
+                product={product} 
+                isFollowing={isFollowing} 
+                currentUserId={currentUserId}
+                owner={owner}
+             />
             <div className="dark:bg-black bg-white rounded-xl md:rounded-2xl md:rounded-b-3xl  md:row-span-2 overflow-hidden md:relative" >
                     <ImageViewer img={{url: product.images?.[0]?.url , alt: product.name }}  />
                     <span className="font-medium text-xs md:text-sm px-2 py-0.5 rounded-md text-black absolute not-md:bottom-4 not-md:left-4 md:top-2 md:right-2  bg-emerald-200" >
@@ -33,7 +33,7 @@ export async function ProductCard({product}: ProductCardProps) {
                                 wishlist={product.wishlist} // [{ productId: '123' }, { productId: '456' }]
                                 productId={product.id}   // '123'
                             />
-                        <ProductLikeBtn product={product} />
+                        <ProductLikeBtn product={product} currentUserId={currentUserId} />
                     </div>
             </div>
             <div className="p-2 not-md:col-span-2  pr-0 flex gap-0.5 flex-col justify-between" >

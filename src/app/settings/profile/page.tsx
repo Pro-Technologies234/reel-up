@@ -107,7 +107,12 @@ export default async function Profile() {
                                 <div className="grid grid-cols-3 gap-4" >
                                     {
                                         products.map((product, index) => (
-                                            <ProductCard key={index} product={product} />
+                                            <ProductCard 
+                                                key={index} 
+                                                product={product} 
+                                                currentUserId={user.id}
+                                                owner
+                                             />
                                         ))
                                     }
                                 </div>

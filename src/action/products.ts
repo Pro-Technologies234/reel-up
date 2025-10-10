@@ -64,8 +64,6 @@ export async function fetchProducts(categoryName?: string, productName?: string,
             }
         });
 
-        // Map through products and add `isLiked: boolean`
-        console.log(products[0].cartItems)
         return products
     } catch (error: any) {
         console.error('Unable to fetch Products', error);

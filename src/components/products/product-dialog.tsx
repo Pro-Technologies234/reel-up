@@ -24,9 +24,12 @@ import { useRouter } from "next/navigation";
 
 type ProductInfoProps = {
     product: Products[0]
+    isFollowing?: boolean
+    currentUserId: string
+    owner?: boolean
 }
 
-export function ProductInfoDialog({ product }: ProductInfoProps) {
+export function ProductInfoDialog({ product, isFollowing, owner, currentUserId }: ProductInfoProps) {
     const [currentImg, setCurrentImg] = useState('')
     const router = useRouter()
     const [loading,setLoading] = useState(false)
@@ -60,7 +63,7 @@ export function ProductInfoDialog({ product }: ProductInfoProps) {
             <ImageViewer img={{url: currentImg }} className="row-span-6 "  />
                 <div className="absolute top-2 flex items-center gap-2 right-2 z-1" >
                     <WishlistBtn wishlist={product.wishlist} productId={product.id} />
-                    <ProductLikeBtn product={product} />
+                    <ProductLikeBtn product={product} currentUserId={currentUserId} />
                 </div>
             <div className="grid grid-cols-4 gap-2 row-span-2" >
                 {
@@ -95,10 +98,10 @@ export function ProductInfoDialog({ product }: ProductInfoProps) {
                                 <AvatarImage src={ product.createdBy.avatarUrl || "https://github.com/shadcn.png"} className="object-cover w-full h-full" />
                                 <AvatarFallback className="uppercase rounded-xl" >{product.createdBy?.username[0]}</AvatarFallback>
                         </Avatar>
-                        <div className="flex flex-col" >
+                        <div className="flex flex-col justify-between" >
                             <span>{product.createdBy?.username}</span>
                             <div className="flex items-center gap-2" >
-                                <FollowBtn user={product.createdBy} />
+                                <FollowBtn isFollowing={isFollowing} currentUserId={currentUserId} />
                                 <AddToCart productId={product.id} cartItem={product['cartItems'][0]} />
                                 {/* <Button size={'sm'} >
                                     <MessageCircleMoreIcon/>
@@ -114,13 +117,16 @@ export function ProductInfoDialog({ product }: ProductInfoProps) {
                 </div>
             </div>
             <DialogFooter className="sm:justify-end not-md:mt-4">
-                <Button onClick={deleteThisProduct} className="cursor-pointer bg-red-600 hover:bg-red-500 text-white" >
-                    {
-                        !loading ? 
-                        'Delete Product' : 
-                        'Deleting...'
-                    }
-                </Button>
+                {
+                    owner &&
+                    <Button onClick={deleteThisProduct} className="cursor-pointer bg-red-600 hover:bg-red-500 text-white" >
+                        {
+                            !loading ? 
+                            'Delete Product' : 
+                            'Deleting...'
+                        }
+                    </Button>
+                }
             <DialogClose asChild>
                 <Button type="button">
                 Close

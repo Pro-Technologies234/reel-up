@@ -51,7 +51,7 @@ export async function follow(followingUserId: string) {
                 }
             })
 
-            return {succes: 'You unfollowed this user'}
+            return {success: 'You unfollowed this user'}
         } else {
             await prisma.follow.create({
                 data: {
@@ -183,7 +183,39 @@ export async function getBussinessCategory() {
     }
 }
 
-export async function handleSearchHistory() {
+export async function handleSearchHistory(keyword: string) {
+    try {
+        const { user } = await validateRequest()
+
+        if (!user) {
+            return
+        }
+        console.log('Getting user.')
+        const existingSearch = await prisma.searchHistory.findFirst({
+            where: {
+                searchedById: user.id
+            }
+        })
+
+        if (!existingSearch) {
+            await prisma.searchHistory.create({
+                data: {
+                    searchedById: user.id,
+                    keyword: keyword
+                }
+            })
+            return
+        }
+        return
+
+
+    } catch(error: any) {
+        console.log('Unable to get search history', error)
+        return
+    }
+}
+
+export async function getSearchHistory() {
     try {
         const { user } = await validateRequest()
 

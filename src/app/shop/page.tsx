@@ -26,6 +26,7 @@ const category = params?.category ?? "";
 const search = params?.search ?? "";
 
 const { user } = await validateRequest();
+
 if (!user) {
   redirect("/login");
 }
@@ -52,7 +53,7 @@ return (
           <CategoryButtons categories={categories || []} />
           <ScrollArea className="h-full w-full dark:bg-zinc-950 bg-zinc-50 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4 pt-16 overflow-y-auto">
             {products.map((product, index) => (
-              <ProductCard key={index} product={product} />
+              <ProductCard key={index} product={product} currentUserId={user.id} />
             ))}
           </ScrollArea>
         </div>

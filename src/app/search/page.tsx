@@ -34,6 +34,7 @@ export default async function Search({ searchParams }:SearchPageProps) {
     const  reels  = await fetchReels(search);
     const products = await fetchProducts(undefined,search);
     const sellers = await getSellers()
+    
     if (!user) {
         redirect('/login')
     }
@@ -46,11 +47,11 @@ export default async function Search({ searchParams }:SearchPageProps) {
         <SidebarInset>
             <div className="dark:bg-black h-dvh w-full flex flex-col items-center " >
                 <Navbar cartItems={cartItems}  mode="dark" inApp={true} user={userInfo} />
-                <div className="max-w-7xl w-full h-[90dvh] md:grid lg:grid-cols-5 relative pt-1">
+                <div className="max-w-7xl w-full h-[90dvh] relative pt-1">
                     <ContentFilterButtons/>
                     {filter === "reels" && (
-                    <ScrollArea className="col-span-4 h-[89dvh] ">
-                        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 p-4 pt-16">
+                    <ScrollArea className=" h-[89dvh] ">
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4 pt-16">
                         {reels.map((reel) => (
                             <ReelViewer key={reel.id} reel={reel} />
                         ))}
@@ -59,11 +60,11 @@ export default async function Search({ searchParams }:SearchPageProps) {
                     )}
                     {
                         filter === 'products' &&
-                        <ScrollArea className="col-span-4 h-[89dvh] ">
+                        <ScrollArea className=" h-[89dvh] ">
                             <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 p-4 pt-16">
                                 {
                                     products.map((product)=> (
-                                        <ProductCard product={product} />
+                                        <ProductCard product={product} currentUserId={user.id} />
                                     ))
                                 }
                             </div>

@@ -32,7 +32,7 @@ export function CartDropdown({ cartItems }: CartDropdownProps) {
                     <ShoppingCart />
                     {
                         itemCount > 0 &&
-                    <Badge variant={'destructive'} className="absolute -top-2 -right-2 bg-emerald-500 dark:bg-emerald-500 " >
+                    <Badge variant={'destructive'} className="absolute -top-2 -right-2 px-1.5 bg-rose-500 dark:bg-rose-500 " >
                         { itemCount }
                     </Badge>
                     }

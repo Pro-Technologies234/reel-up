@@ -73,7 +73,7 @@ export function Navbar({ mode = 'light', inApp, user, cartItems }: NavbarProps) 
     </div>
     ) : (
 
-    <div className="w-full  z-10  flex m-auto  justify-between items-center h-15 px-4 md:pl-4 md:pr-20">
+    <div className="w-full  z-10  flex gap-4 m-auto  justify-between items-center h-15 px-4 md:pl-4 md:pr-20">
       <div className="flex items-center gap-2 text-black dark:text-white px-4">
           <SidebarTrigger className="-ml-1" />
           <Separator
