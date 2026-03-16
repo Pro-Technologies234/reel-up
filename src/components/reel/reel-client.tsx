@@ -1,31 +1,35 @@
-'use client'
-import { Reel } from "@/lib/prisma"
-import { Button } from "../ui/button"
-import { ChevronDown, ChevronUp, DivideCircle, Heart, Plus, Share, VolumeOff } from "lucide-react"
-import { useEffect, useState } from "react"
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
-import { Reels } from "@/action/reel"
-import { ReelLikeBtn } from "../shared/like-btn"
+"use client";
+import { Button } from "../ui/button";
+import {
+  ChevronDown,
+  ChevronUp,
+  DivideCircle,
+  Heart,
+  Plus,
+  Share,
+  VolumeOff,
+} from "lucide-react";
+import { useEffect, useState } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Reels } from "@/action/reel";
+import { ReelLikeBtn } from "../shared/like-btn";
 
-
-export interface ReelCardProps  {
+export interface ReelCardProps {
   reel: Reels[0];
-};
+}
 
 export function ReelCard({ reel }: ReelCardProps) {
-    
   return (
     <div className="w-full h-full shrink-0 relative rounded-3xl overflow-hidden shadow-lg bg-black flex flex-col">
+      <video
+        src={reel.url}
+        playsInline
+        autoPlay
+        loop
+        muted
+        className="object-cover w-full h-full flex-grow"
+      />
 
-        <video
-            src={reel.url}
-            playsInline
-            autoPlay
-            loop
-            muted
-            className="object-cover w-full h-full flex-grow"
-        />
-        
       <div className="absolute bottom-0 left-0 right-0 p-12 bg-gradient-to-t from-black/80 via-transparent to-transparent text-white">
         <div className="flex items-center justify-between mb-2">
           <div className="bg-red-600 tracking-widest text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">
@@ -34,9 +38,7 @@ export function ReelCard({ reel }: ReelCardProps) {
           <span className="text-xs opacity-70">July 30, 2025</span>
         </div>
         <h3 className="text-lg font-semibold">@{reel.name}</h3>
-        <p className="text-sm opacity-80 max-w-md truncate">
-          {reel.caption}
-        </p>
+        <p className="text-sm opacity-80 max-w-md truncate">{reel.caption}</p>
       </div>
 
       {/* Right-side vertical controls */}
@@ -62,33 +64,35 @@ export function ReelCard({ reel }: ReelCardProps) {
   );
 }
 
-
-
-export const ProfileCover = ({reel}:{reel: Reels[0]})=> {
-    return (
-        <div className=" h-15 w-15 rounded-2xl relative" >
-            {/* <div className="absolute inset-0 outline-4 outline-red-500 outline-offset-3 rounded-2xl animate-pulse" >
+export const ProfileCover = ({ reel }: { reel: Reels[0] }) => {
+  return (
+    <div className=" h-15 w-15 rounded-2xl relative">
+      {/* <div className="absolute inset-0 outline-4 outline-red-500 outline-offset-3 rounded-2xl animate-pulse" >
             </div> */}
-            <Avatar className=" rounded-2xl w-full h-full overflow-hidden" >
-                <AvatarImage src={reel.createdBy.avatarUrl || "https://github.com/shadcn.png"} className="object-cover w-full h-full" />
-                <AvatarFallback  className="uppercase bg-white rounded-2xl text-black" >P</AvatarFallback>
-            </Avatar>
-            <div className="absolute -bottom-3 w-full flex justify-center" >
-                <Button size={'icon'} className="rounded-xl cursor-pointer text-white h-5 w-5  bg-yellow-300 text-black" >
-                    <Plus size={5}  />
-                </Button>
-            </div>
-        </div>
-    )
-}
+      <Avatar className=" rounded-2xl w-full h-full overflow-hidden">
+        <AvatarImage
+          src={reel?.createdBy?.avatarUrl || "https://github.com/shadcn.png"}
+          className="object-cover w-full h-full"
+        />
+        <AvatarFallback className="uppercase bg-white rounded-2xl text-black">
+          P
+        </AvatarFallback>
+      </Avatar>
+      <div className="absolute -bottom-3 w-full flex justify-center">
+        <Button
+          size={"icon"}
+          className="rounded-xl cursor-pointer text-white h-5 w-5  bg-yellow-300 text-black"
+        >
+          <Plus size={5} />
+        </Button>
+      </div>
+    </div>
+  );
+};
 
 type ReelLoaderProps = {
   reels: Reels;
 };
-
-
-
-
 
 export function ReelLoader({ reels }: ReelLoaderProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -112,7 +116,7 @@ export function ReelLoader({ reels }: ReelLoaderProps) {
             height: `${reels.length * 25}%`,
           }}
         >
-          {reels.map((reel,indx) => (
+          {reels.map((reel, indx) => (
             <div
               key={reel.id}
               className="h-full shrink-0 flex justify-center items-center"
@@ -122,7 +126,6 @@ export function ReelLoader({ reels }: ReelLoaderProps) {
           ))}
         </div>
       </div>
-      
 
       {/* Buttons to control sliding */}
       <div className="flex flex-col justify-center items-center gap-4 px-2">

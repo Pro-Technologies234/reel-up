@@ -1,6 +1,6 @@
-'use server';
+"use server";
 import { Livepeer } from "livepeer";
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 import { validateRequest } from "@/lib/validate-user";
 
 // export async function startLiveStream() {
@@ -57,18 +57,17 @@ import { validateRequest } from "@/lib/validate-user";
 //   }
 // }
 
-
 export async function startLiveStream() {
   const { user } = await validateRequest();
 
   if (!user) {
-    return { error: 'Unauthorized' };
+    return { error: "Unauthorized" };
   }
 
   const apiKey = process.env.LIVEPEER_API_KEY;
   if (!apiKey) {
     console.error("LIVEPEER_API_KEY is not set");
-    return { error: 'Server misconfiguration: API key missing' };
+    return { error: "Server misconfiguration: API key missing" };
   }
 
   const livepeer = new Livepeer({ apiKey });
@@ -82,16 +81,15 @@ export async function startLiveStream() {
       data: {
         createdById: user.id,
         isLive: true,
-        playbackId: response.stream?.playbackId || '',
+        playbackId: response.stream?.playbackId || "",
         streamKey: response.stream?.streamKey || "",
-      }
+      },
     });
 
     console.log("Stream created:", response);
     return { liveStream };
-
   } catch (error) {
     console.error("Error creating stream:", error);
-    return { error: 'Unable to create live stream.' };
+    return { error: "Unable to create live stream." };
   }
 }

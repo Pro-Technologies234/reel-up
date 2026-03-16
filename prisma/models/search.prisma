@@ -1,0 +1,7 @@
+model SearchHistory {
+    id           Int      @id @default(autoincrement())
+    keyword      String
+    searchedById String
+    searchedBy   User     @relation(fields: [searchedById], references: [id])
+    createdAt    DateTime @default(now())
+}

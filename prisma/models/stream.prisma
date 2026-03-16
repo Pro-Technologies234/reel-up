@@ -1,0 +1,10 @@
+model LiveStream {
+    id          String   @id @default(cuid())
+    createdById String
+    createdBy   User     @relation(fields: [createdById], references: [id])
+    isLive      Boolean?
+    playbackId  String
+    streamKey   String?
+    rtmpUrl     String?  @default("rtmp://rtmp.livepeer.com/live")
+    createdAt   DateTime @default(now())
+}

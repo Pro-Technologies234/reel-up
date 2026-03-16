@@ -1,7 +1,7 @@
-'use client'
+"use client";
 import { Heart, Loader2 } from "lucide-react";
 import { Button } from "../ui/button";
-import {  likeProduct, Products } from "@/action/products";
+import { likeProduct, Products } from "@/action/products";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Separator } from "../ui/separator";
@@ -9,89 +9,90 @@ import { useRouter } from "next/navigation";
 import { likeReel } from "@/action/reel";
 import { validateRequest } from "@/lib/validate-user";
 
-
 type LikeBtnProps = {
-    product: Products[0] 
-    currentUserId?: string
-}
+  product: Products[0];
+  currentUserId?: string;
+};
 
 export function ProductLikeBtn({ product, currentUserId }: LikeBtnProps) {
-    const router = useRouter()
-    const [isLiked, setIsLiked] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
-    const [likes, setLikes] = useState(0)
+  const router = useRouter();
+  const [isLiked, setIsLiked] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [likes, setLikes] = useState(0);
 
-    useEffect(() => {
-      setIsLiked(product.likes.some(like => like.userId === currentUserId))
-      setLikes(product.likes.length)
-    }, [product, currentUserId])
+  useEffect(() => {
+    setIsLiked(product.likes.some((like) => like.userId === currentUserId));
+    setLikes(product.likes.length);
+  }, [product, currentUserId]);
 
-
-    async function setLike() {
-        setIsLoading(true)
-        const { error, like } = await likeProduct(product.id)
-        if (like != null) {
-            setIsLiked(like)
-            router.refresh()
-        } else if (error) {
-            toast.error(error)
-        }
-        setIsLoading(false)
+  async function setLike() {
+    setIsLoading(true);
+    const { error, like } = await likeProduct(product.id);
+    if (like != null) {
+      setIsLiked(like);
+      router.refresh();
+    } else if (error) {
+      toast.error(error);
     }
+    setIsLoading(false);
+  }
 
-    return (
-        <Button
-            onClick={setLike}
-            className={`group border dark:bg-zinc-900 bg-zinc-50 dark:hover:bg-zinc-950 hover:bg-white ${
-                isLiked ? 'text-black dark:text-white' : 'dark:text-white text-black'
-            } cursor-pointer z-10 backdrop-blur-xl rounded-xl`}
-        >
-            <span className="mt-1">{likes}</span>
-            <Separator orientation="vertical" className="not-dark:bg-white/10" />
-            {isLoading ? (
-                <Loader2 className="animate-spin" />
-            ) : (
-                <Heart
-                    className={isLiked ? 'fill-black dark:fill-white' : ' fill-transparent'}
-                />
-            )}
-        </Button>
-    )
+  return (
+    <Button
+      onClick={setLike}
+      className={`group border dark:bg-zinc-900 bg-zinc-50 dark:hover:bg-zinc-950 hover:bg-white ${
+        isLiked ? "text-black dark:text-white" : "dark:text-white text-black"
+      } cursor-pointer z-10 backdrop-blur-xl rounded-xl`}
+    >
+      <span className="mt-1">{likes}</span>
+      <Separator orientation="vertical" className="not-dark:bg-white/10" />
+      {isLoading ? (
+        <Loader2 className="animate-spin" />
+      ) : (
+        <Heart
+          className={
+            isLiked ? "fill-black dark:fill-white" : " fill-transparent"
+          }
+        />
+      )}
+    </Button>
+  );
 }
-
 
 type ReelLikeBtnProps = {
   reel: {
-    id: string
-    likes: { userId: string }[] // array of users who liked
-  }
-  currentUserId?: string
-}
+    id: string;
+    likes: { userId: string }[]; // array of users who liked
+  };
+  currentUserId?: string;
+};
 
 export function ReelLikeBtn({ reel, currentUserId }: ReelLikeBtnProps) {
-  const router = useRouter()
-  const [isLiked, setIsLiked] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const [likes, setLikes] = useState(reel.likes.length)
+  const router = useRouter();
+  const [isLiked, setIsLiked] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [likes, setLikes] = useState(reel?.likes?.length || 0);
 
   useEffect(() => {
-    setIsLiked(reel.likes.some(like => like.userId === currentUserId))
-    setLikes(reel.likes.length)
-  }, [reel, currentUserId])
+    setIsLiked(
+      reel?.likes?.some((like) => like.userId === currentUserId) || false,
+    );
+    setLikes(reel?.likes?.length || 0);
+  }, [reel, currentUserId]);
 
   async function setLike() {
-    setIsLoading(true)
-    const { error, liked } = await likeReel(reel.id)
+    setIsLoading(true);
+    const { error, liked } = await likeReel(reel.id);
 
     if (liked != null) {
-      setIsLiked(liked)
-      setLikes(prev => liked ? prev + 1 : prev - 1)
+      setIsLiked(liked);
+      setLikes((prev) => (liked ? prev + 1 : prev - 1));
     } else if (error) {
-      toast.error(error)
+      toast.error(error);
     }
 
-    setIsLoading(false)
-    router.refresh()
+    setIsLoading(false);
+    router.refresh();
   }
 
   return (
@@ -99,9 +100,8 @@ export function ReelLikeBtn({ reel, currentUserId }: ReelLikeBtnProps) {
       <Button
         size={"icon"}
         onClick={setLike}
-        className={`group dark:bg-zinc-950 dark:hover:bg-zinc-900 hover:bg-zinc-50 bg-white  ${isLiked
-          ? "text-rose-600 "
-          : " text-black dark:text-white"
+        className={`group dark:bg-zinc-950 dark:hover:bg-zinc-900 hover:bg-zinc-50 bg-white  ${
+          isLiked ? "text-rose-600 " : " text-black dark:text-white"
         } cursor-pointer z-10 backdrop-blur-xl rounded-xl`}
         aria-label="Like"
       >
@@ -114,7 +114,9 @@ export function ReelLikeBtn({ reel, currentUserId }: ReelLikeBtnProps) {
           />
         )}
       </Button>
-      <span className="dark:text-white text-black text-lg font-normal">{likes}</span>
+      <span className="dark:text-white text-black text-lg font-normal">
+        {likes}
+      </span>
     </div>
-  )
+  );
 }

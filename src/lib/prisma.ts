@@ -1,17 +1,10 @@
-import {  PrismaClient } from './generated/prisma';
+import "dotenv/config";
+import { PrismaPg } from "@prisma/adapter-pg";
+import { PrismaClient } from "./generated/prisma/client";
 
-let prisma: PrismaClient;
+const connectionString = `${process.env.DATABASE_URL}`;
 
-if (process.env.NODE_ENV === 'production') {
-	prisma = new PrismaClient();
-} else {
-	// @ts-expect-error @typescript-eslint/ban-ts-comment
-	if (!global.prisma) {
-		// @ts-expect-error @typescript-eslint/ban-ts-comment
-		global.prisma = new PrismaClient();
-	} // @ts-expect-error @typescript-eslint/ban-ts-comment
-	prisma = global.prisma;
-}
+const adapter = new PrismaPg({ connectionString });
+const prisma = new PrismaClient({ adapter });
 
-export * from "./generated/prisma"
-export default prisma
+export { prisma };

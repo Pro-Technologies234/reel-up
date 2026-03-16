@@ -1,10 +1,7 @@
 import { Navbar } from "@/components/shared/navbar";
 import { validateRequest } from "@/lib/validate-user";
 import { AppSidebar } from "@/components/shared/app-sidebar";
-import {
-  SidebarInset,
-  SidebarProvider,
-} from "@/components/ui/sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { redirect } from "next/navigation";
 import { getCartItems } from "@/action/cart";
 import { fetchReels } from "@/action/reel";

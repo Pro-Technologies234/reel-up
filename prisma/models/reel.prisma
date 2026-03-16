@@ -1,0 +1,10 @@
+model Reel {
+    id          String   @id @default(cuid())
+    name        String?
+    caption     String?
+    createdById String
+    createdBy   User     @relation(fields: [createdById], references: [id])
+    url         String
+    createdAt   DateTime @default(now())
+    likes       Like[]
+}

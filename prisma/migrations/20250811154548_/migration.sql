@@ -1,3 +1,0 @@
--- AlterTable
-ALTER TABLE `reel` ADD COLUMN `caption` VARCHAR(191) NULL,
-    ADD COLUMN `name` VARCHAR(191) NULL;

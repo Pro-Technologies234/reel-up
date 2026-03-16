@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import * as React from "react";
 import { Moon, Sun, Monitor } from "lucide-react";
@@ -28,7 +28,12 @@ export function ModeToggle() {
   const currentTheme = theme === "system" ? systemTheme : theme;
 
   return (
-    <Button onClick={toggleTheme} variant="outline" size="icon" className="cursor-pointer">
+    <Button
+      onClick={toggleTheme}
+      variant="outline"
+      size="icon"
+      className="cursor-pointer"
+    >
       {theme === "system" ? (
         <Monitor className="h-[1.2rem] w-[1.2rem]" />
       ) : currentTheme === "light" ? (

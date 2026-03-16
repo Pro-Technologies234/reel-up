@@ -1,0 +1,89 @@
+model User {
+    id                          String              @id @default(cuid())
+    username                    String              @unique
+    email                       String              @unique
+    avatarUrl                   String?
+    bio                         String?
+    createdAt                   DateTime            @default(now())
+    updatedAt                   DateTime            @updatedAt
+    sessions                    Session[]
+    products                    Product[]
+    cartItems                   CartItem[]
+    likes                       Like[]
+    liveStream                  LiveStream[]
+    reel                        Reel[]
+    wishllist                   WishList[]
+    followers                   Follow[]            @relation("followers")
+    following                   Follow[]            @relation("following")
+    bussinessName               String?
+    bussinessAddress            String?
+    phoneNumber                 String?
+    bussinessEmail              String?
+    bussinessType               BussinessType?
+    bussinessRegistrationNumber String?
+    bussinessCategory           BussinessCategory[] @relation("bussinessCategory")
+    terms                       Boolean?            @default(false)
+    isSeller                    Boolean?            @default(false)
+    idsVerified                  Boolean?            @default(false)
+    searchHistory               SearchHistory[]
+    name                        String
+    emailVerified               Boolean             @default(false)
+    image                       String?
+    slug                        String?
+    firstName                   String?
+    lastName                    String?
+    dateOfBirth                 DateTime?
+    gender                      String?
+    role                        String?
+    accounts                    Account[]
+
+    @@map("user")
+}
+
+model Session {
+    id        String   @id @default(cuid())
+    userId    String
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    expiresAt DateTime
+    createdAt DateTime @default(now())
+    token     String
+    updatedAt DateTime @updatedAt
+    ipAddress String?
+    userAgent String?
+
+    @@unique([token])
+    @@index([userId])
+    @@map("session")
+}
+
+model Account {
+    id                    String    @id
+    accountId             String
+    providerId            String
+    userId                String
+    user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+    accessToken           String?
+    refreshToken          String?
+    idToken               String?
+    accessTokenExpiresAt  DateTime?
+    refreshTokenExpiresAt DateTime?
+    scope                 String?
+    password              String?
+    createdAt             DateTime  @default(now())
+    updatedAt             DateTime  @updatedAt
+
+    @@index([userId])
+    @@map("account")
+}
+
+model Verification {
+    id         String   @id
+    identifier String
+    value      String
+    expiresAt  DateTime
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+
+    @@index([identifier])
+    @@map("verification")
+}
